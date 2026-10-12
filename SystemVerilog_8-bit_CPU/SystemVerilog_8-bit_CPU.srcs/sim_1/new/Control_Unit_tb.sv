@@ -185,7 +185,8 @@ module Control_Unit_tb #(parameter INSTRUCTION_WIDTH = 16, OPERATION_WIDTH = 4);
                     $display("FAIL ALU: Expected result (%d) was not received correctly", register_write_source);
                 end
                 
-            #200 $finish;
+            #200
+            $finish;
         end
 
 

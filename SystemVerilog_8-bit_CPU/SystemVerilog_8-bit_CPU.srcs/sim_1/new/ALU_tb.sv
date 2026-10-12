@@ -387,7 +387,8 @@ module ALU_tb #(parameter DATA_WIDTH = 32);
                     $display("FAIL AND: Expected result (%d) was not received correctly", data_out);
                 end
                 
-            #200 $finish;
+            #200
+            $finish;
         end
 
 
