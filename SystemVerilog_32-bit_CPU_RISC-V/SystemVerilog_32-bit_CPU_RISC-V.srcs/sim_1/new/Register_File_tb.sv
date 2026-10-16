@@ -7,6 +7,7 @@ module Register_File_tb #(parameter DATA_WIDTH = 32, REGISTER_SELECTION_WIDTH = 
     logic clk;
     
     logic write_register_enable;
+    logic read_register_enable;
     logic [REGISTER_SELECTION_WIDTH-1:0] write_register_select;
     logic signed [DATA_WIDTH-1:0] write_register_data;
     
@@ -19,6 +20,7 @@ module Register_File_tb #(parameter DATA_WIDTH = 32, REGISTER_SELECTION_WIDTH = 
     Register_File utt (
         .clk(clk),
         .write_register_enable(write_register_enable),
+        .read_register_enable(read_register_enable),
         .write_register_select(write_register_select),
         .write_register_data(write_register_data),
         .read_register_select_1(read_register_select_1),
@@ -37,6 +39,7 @@ module Register_File_tb #(parameter DATA_WIDTH = 32, REGISTER_SELECTION_WIDTH = 
     initial 
         begin
             clk = 0;
+            read_register_enable = 0;
             write_register_enable = 0;
             write_register_select = 0;
             write_register_data = 0;
@@ -47,6 +50,7 @@ module Register_File_tb #(parameter DATA_WIDTH = 32, REGISTER_SELECTION_WIDTH = 
             @(negedge clk)
             
             write_register_enable = 1;
+            read_register_enable = 0;
             write_register_select = 0; 
             write_register_data = 32'sd24;
             
@@ -54,9 +58,12 @@ module Register_File_tb #(parameter DATA_WIDTH = 32, REGISTER_SELECTION_WIDTH = 
             #1
             
             write_register_enable = 0;
+            read_register_enable = 1;
             read_register_select_1 = 0;
             
+            @(posedge clk)
             #1
+            
             if (read_register_data_1 == '0)
                 begin
                     $display("SUCCESS: Register 0 was keeped unchanged");
@@ -70,6 +77,7 @@ module Register_File_tb #(parameter DATA_WIDTH = 32, REGISTER_SELECTION_WIDTH = 
             @(negedge clk)
             
             write_register_enable = 1;
+            read_register_enable = 0;
             write_register_select = 23;
             write_register_data = -32'sd38;
             
@@ -77,9 +85,12 @@ module Register_File_tb #(parameter DATA_WIDTH = 32, REGISTER_SELECTION_WIDTH = 
             #1
             
             write_register_enable = 0;
+            read_register_enable = 1;
             read_register_select_2 = 23;
             
+            @(posedge clk)
             #1
+            
             if (read_register_data_2 == write_register_data)
                 begin
                     $display("SUCCESS: Number %d was written in register %d", write_register_data, write_register_select);
@@ -93,6 +104,7 @@ module Register_File_tb #(parameter DATA_WIDTH = 32, REGISTER_SELECTION_WIDTH = 
             @(negedge clk)
             
             write_register_enable = 0;
+            read_register_enable = 0;
             write_register_select = 23;
             write_register_data = 32'sd51;
             
@@ -100,9 +112,12 @@ module Register_File_tb #(parameter DATA_WIDTH = 32, REGISTER_SELECTION_WIDTH = 
             #1
             
             write_register_enable = 0;
+            read_register_enable = 1;
             read_register_select_2 = 23;
             
+            @(posedge clk)
             #1
+            
             if (read_register_data_2 == -32'sd38)
                 begin
                     $display("SUCCESS: Register %d was keeped unchanged", write_register_select);
@@ -110,6 +125,48 @@ module Register_File_tb #(parameter DATA_WIDTH = 32, REGISTER_SELECTION_WIDTH = 
             else
                 begin
                     $display("FAIL: Register %d was not keeped unchanged", write_register_select);
+                end
+                
+            #200
+            @(negedge clk)
+            
+            write_register_enable = 1;
+            read_register_enable = 0;
+            write_register_select = 18;
+            write_register_data = -32'sd535;
+            
+            @(posedge clk)
+            #1
+            
+            write_register_enable = 0;
+            read_register_enable = 1;
+            read_register_select_1 = 18;
+            
+            #200
+            @(negedge clk)
+            
+            write_register_enable = 1;
+            read_register_enable = 0;
+            write_register_select = 13;
+            write_register_data = 32'sd134;
+            
+            @(posedge clk)
+            #1
+            
+            write_register_enable = 0;
+            read_register_enable = 1;
+            read_register_select_2 = 13;
+            
+            @(posedge clk)
+            #1
+            
+            if (read_register_data_2 == 32'sd134 && read_register_data_1 == -32'sd535)
+                begin
+                    $display("SUCCESS: Both registors got and gave rigth data");
+                end
+            else
+                begin
+                    $display("FAIL: Both registors didn't get and give rigth data");
                 end
                 
             #200

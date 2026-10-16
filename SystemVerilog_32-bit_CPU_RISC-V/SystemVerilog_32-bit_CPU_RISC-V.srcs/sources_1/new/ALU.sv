@@ -12,6 +12,7 @@ module ALU #(parameter DATA_WIDTH = 32)
     
     output logic [DATA_WIDTH-1:0] data_out,
     output logic zero,
+    output logic equal,
     output logic ltu,
     output logic lt
 );
@@ -19,12 +20,14 @@ module ALU #(parameter DATA_WIDTH = 32)
 
     logic [DATA_WIDTH:0] temprorary_sum;
     logic alu_zero;
+    logic alu_equal;
     logic alu_ltu;
     logic alu_lt;
     
-    assign zero = (alu_zero == 1 ? 1 : 0);
-    assign lt = (alu_lt == 1 ? 1 : 0);
-    assign ltu = (alu_ltu == 1 ? 1 : 0);
+    assign zero = (alu_zero == 1);
+    assign equal = (alu_equal == 1);
+    assign lt = (alu_lt == 1);
+    assign ltu = (alu_ltu == 1);
 
     always_comb 
         begin
@@ -83,7 +86,8 @@ module ALU #(parameter DATA_WIDTH = 32)
             endcase
             
             data_out = temprorary_sum;
-            alu_zero = (data_out == 0 ? 1 : 0);
+            alu_zero = (data_out == 32'b0);
+            alu_equal = (data_in_operand_a == data_in_operand_b);
         end
     
 
