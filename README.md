@@ -24,9 +24,9 @@ This branch contains a CPU (developed previously) to implement some elementary c
 * **CPU Moduludus Modernization**
 - [X] ALU (Mathematical & Logical commands/calculations).
 - [X] Regsiter File (Registers read/write control).
-- [ ] Data Memory (Read/write constants & variables).
-- [ ] Instruction Memory (Read/write instructions).
-- [ ] Program Counter (Instruction address tracking & flow control).
+- [X] Data Memory (Read/write constants & variables).
+- [X] Instruction Memory (Read/write instructions).
+- [50/50] Program Counter (Instruction address tracking & flow control).
 - [ ] Control Unit (Instructions decoding & distribution).
 - [ ] CPU TOP (Unite all parts & data transfer).
 * These are current tasks (goals), the next stage will be connecting RISC-V standard compilator to translate C commands into machine code and launch sterling PL <-> CPU interaction.
