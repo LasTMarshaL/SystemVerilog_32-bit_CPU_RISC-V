@@ -1,5 +1,5 @@
 # SystemVerilog_32-bit_CPU_RISC-V
-Previous CPU version modernization to the RISC-V standard and C-development
+Previous CPU version (Can be seen in "main" brancg) modernization to the RISC-V standard and C-development.
 
 ## 📌About
 This branch contains a CPU (developed previously) to implement some elementary commands and explore CPU architecture, modernized to RISC-V standard. (**!Development stage!**)
