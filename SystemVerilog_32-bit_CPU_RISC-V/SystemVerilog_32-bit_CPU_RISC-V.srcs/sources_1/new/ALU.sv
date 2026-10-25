@@ -1,7 +1,10 @@
 `timescale 1ns / 1ps
 
 
-module ALU #(parameter DATA_WIDTH = 32)
+import CPU_Parameters_Config::*;
+
+
+module ALU #() 
 (
     input logic [6:0] operation_code,
     input logic [2:0] function3,
@@ -17,8 +20,10 @@ module ALU #(parameter DATA_WIDTH = 32)
     output logic lt
 );
 
-
-    logic [DATA_WIDTH:0] temprorary_sum;
+    
+    localparam SHIFT_BITS = $clog2(DATA_WIDTH);
+    
+    logic [DATA_WIDTH-1:0] temprorary_sum;
     logic alu_zero;
     logic alu_equal;
     logic alu_ltu;
@@ -46,17 +51,17 @@ module ALU #(parameter DATA_WIDTH = 32)
                             endcase
                         3'b001: 
                             case (function7)
-                                7'b0000000: temprorary_sum = data_in_operand_a << data_in_operand_b[4:0]; // SLL
+                                7'b0000000: temprorary_sum = data_in_operand_a << data_in_operand_b[SHIFT_BITS-1:0]; // SLL
                                 default:    temprorary_sum = '0;
                             endcase
                         3'b010: 
                             case (function7)
-                                7'b0000000: temprorary_sum = ($signed(data_in_operand_a) < $signed(data_in_operand_b) ? 32'b1 : 32'b0); // SLT
+                                7'b0000000: temprorary_sum = ($signed(data_in_operand_a) < $signed(data_in_operand_b) ? DATA_WIDTH'(1) : '0); // SLT
                                 default:    temprorary_sum = '0;
                             endcase
                         3'b011: 
                             case (function7)
-                                7'b0000000: temprorary_sum = (data_in_operand_a < data_in_operand_b ? 1 : 0); // SLTU
+                                7'b0000000: temprorary_sum = (data_in_operand_a < data_in_operand_b ? DATA_WIDTH'(1) : '0); // SLTU
                                 default:    temprorary_sum = '0;
                             endcase
                         3'b100: 
@@ -67,7 +72,7 @@ module ALU #(parameter DATA_WIDTH = 32)
                         3'b101: 
                             case (function7)
                                 7'b0000000: temprorary_sum = data_in_operand_a >> data_in_operand_b[4:0]; // SRL
-                                7'b0100000: temprorary_sum = $unsigned($signed(data_in_operand_a) >>> data_in_operand_b[4:0]); // SRA
+                                7'b0100000: temprorary_sum = $unsigned($signed(data_in_operand_a) >>> data_in_operand_b[SHIFT_BITS-1:0]); // SRA
                                 default:    temprorary_sum = '0;
                             endcase
                         3'b110: 
@@ -86,7 +91,7 @@ module ALU #(parameter DATA_WIDTH = 32)
             endcase
             
             data_out = temprorary_sum;
-            alu_zero = (data_out == 32'b0);
+            alu_zero = (data_out == '0);
             alu_equal = (data_in_operand_a == data_in_operand_b);
         end
     

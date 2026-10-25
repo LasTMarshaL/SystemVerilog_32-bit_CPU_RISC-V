@@ -1,7 +1,10 @@
 `timescale 1ns / 1ps
 
 
-module ALU_tb #(parameter DATA_WIDTH = 32);
+import CPU_Parameters_Config::*;
+
+
+module ALU_tb #();
 
 
     logic [6:0] operation_code;
@@ -51,11 +54,11 @@ module ALU_tb #(parameter DATA_WIDTH = 32);
             operation_code = 7'b0110011;
             function3 = 3'b000;
             function7 = 7'b0000000;
-            data_in_operand_a = 32'sd453748;
-            data_in_operand_b = 32'sd3144556;
+            data_in_operand_a = DATA_WIDTH'('sd453748);
+            data_in_operand_b = DATA_WIDTH'('sd3144556);
             
             #5
-            if (data_out == 32'sd3598304)
+            if (data_out == DATA_WIDTH'('sd3598304))
                 begin
                      $display("SUCCESS ADD: Expected result (%d) was received correctly", data_out);
                 end
@@ -68,11 +71,11 @@ module ALU_tb #(parameter DATA_WIDTH = 32);
             operation_code = 7'b0110011;
             function3 = 3'b000;
             function7 = 7'b0100000;
-            data_in_operand_a = 32'sd57467;
-            data_in_operand_b = 32'sd46685;
+            data_in_operand_a = DATA_WIDTH'('sd57467);
+            data_in_operand_b = DATA_WIDTH'('sd46685);
             
             #5
-            if (data_out == 32'sd10782)
+            if (data_out == DATA_WIDTH'('sd10782))
                 begin
                      $display("SUCCESS SUB: Expected result (%d) was received correctly", data_out);
                 end
@@ -85,11 +88,11 @@ module ALU_tb #(parameter DATA_WIDTH = 32);
             operation_code = 7'b0110011;
             function3 = 3'b001;
             function7 = 7'b0000000;
-            data_in_operand_a = 32'sd45425;
-            data_in_operand_b = 32'sd4;
+            data_in_operand_a = DATA_WIDTH'('sd45425);
+            data_in_operand_b = DATA_WIDTH'('sd4);
             
             #5
-            if (data_out == 32'sd726800)
+            if (data_out == DATA_WIDTH'('sd726800))
                 begin
                      $display("SUCCESS SLL: Expected result (%d) was received correctly", data_out);
                 end
@@ -102,11 +105,11 @@ module ALU_tb #(parameter DATA_WIDTH = 32);
             operation_code = 7'b0110011;
             function3 = 3'b001;
             function7 = 7'b0000000;
-            data_in_operand_a = 32'sd45425;
-            data_in_operand_b = 32'sd40;
+            data_in_operand_a = DATA_WIDTH'('sd45425);
+            data_in_operand_b = DATA_WIDTH'('sd40);
             
             #5
-            if (data_out == 32'sd11628800)
+            if (data_out == DATA_WIDTH'('sd11628800))
                 begin
                      $display("SUCCESS SLL: Expected result (%d) was received correctly", data_out);
                 end
@@ -119,11 +122,11 @@ module ALU_tb #(parameter DATA_WIDTH = 32);
             operation_code = 7'b0110011;
             function3 = 3'b010;
             function7 = 7'b0000000;
-            data_in_operand_a = 32'sd34;
-            data_in_operand_b = 32'sd45355;
+            data_in_operand_a = DATA_WIDTH'('sd34);
+            data_in_operand_b = DATA_WIDTH'('sd45355);
             
             #5
-            if (data_out == 32'sd1) 
+            if (data_out == DATA_WIDTH'(1)) 
                 begin
                      $display("SUCCESS STL: Expected result (%d) was received correctly", data_out);
                 end
@@ -136,11 +139,11 @@ module ALU_tb #(parameter DATA_WIDTH = 32);
             operation_code = 7'b0110011;
             function3 = 3'b010;
             function7 = 7'b0000000;
-            data_in_operand_a = 32'sd341578;
-            data_in_operand_b = 32'sd47495;
+            data_in_operand_a = DATA_WIDTH'('sd341578);
+            data_in_operand_b = DATA_WIDTH'('sd47495);
             
             #5
-            if (data_out == 32'sd0) 
+            if (data_out == '0) 
                 begin
                      $display("SUCCESS STL: Expected result (%d) was received correctly", data_out);
                 end
@@ -153,11 +156,11 @@ module ALU_tb #(parameter DATA_WIDTH = 32);
             operation_code = 7'b0110011;
             function3 = 3'b011;
             function7 = 7'b0000000;
-            data_in_operand_a = 32'd34256;
-            data_in_operand_b = 32'd7468946;
+            data_in_operand_a = DATA_WIDTH'(34256);
+            data_in_operand_b = DATA_WIDTH'(7468946);
             
             #5
-            if (data_out == 32'sd1) 
+            if (data_out == DATA_WIDTH'(1)) 
                 begin
                      $display("SUCCESS STLU: Expected result (%d) was received correctly", data_out);
                 end
@@ -170,11 +173,11 @@ module ALU_tb #(parameter DATA_WIDTH = 32);
             operation_code = 7'b0110011;
             function3 = 3'b011;
             function7 = 7'b0000000;
-            data_in_operand_a = 32'd3425635;
-            data_in_operand_b = 32'd74686;
+            data_in_operand_a = DATA_WIDTH'(3425635);
+            data_in_operand_b = DATA_WIDTH'(74686);
             
             #5
-            if (data_out == 32'sd0) 
+            if (data_out == '0) 
                 begin
                      $display("SUCCESS STLU: Expected result (%d) was received correctly", data_out);
                 end
@@ -187,11 +190,11 @@ module ALU_tb #(parameter DATA_WIDTH = 32);
             operation_code = 7'b0110011;
             function3 = 3'b100;
             function7 = 7'b0000000;
-            data_in_operand_a = 32'sd341578;
-            data_in_operand_b = 32'sd231345;
+            data_in_operand_a = DATA_WIDTH'('sd341578);
+            data_in_operand_b = DATA_WIDTH'('sd231345);
             
             #5
-            if (data_out == 32'sd438779) 
+            if (data_out == DATA_WIDTH'('sd438779)) 
                 begin
                      $display("SUCCESS XOR: Expected result (%d) was received correctly", data_out);
                 end
@@ -204,11 +207,11 @@ module ALU_tb #(parameter DATA_WIDTH = 32);
             operation_code = 7'b0110011;
             function3 = 3'b100;
             function7 = 7'b0000000;
-            data_in_operand_a = 32'sd42665;
-            data_in_operand_b = 32'sd42665;
+            data_in_operand_a = DATA_WIDTH'('sd42665);
+            data_in_operand_b = DATA_WIDTH'('sd42665);
             
             #5
-            if (data_out == 32'sd0) 
+            if (data_out == '0) 
                 begin
                      $display("SUCCESS XOR: Expected result (%d) was received correctly", data_out);
                 end
@@ -221,11 +224,11 @@ module ALU_tb #(parameter DATA_WIDTH = 32);
             operation_code = 7'b0110011;
             function3 = 3'b101;
             function7 = 7'b0000000;
-            data_in_operand_a = 32'd324450;
-            data_in_operand_b = 32'd3;
+            data_in_operand_a = DATA_WIDTH'(324450);
+            data_in_operand_b = DATA_WIDTH'(3);
             
             #5
-            if (data_out == 32'd40556) 
+            if (data_out == DATA_WIDTH'(40556)) 
                 begin
                      $display("SUCCESS SRL: Expected result (%d) was received correctly", data_out);
                 end
@@ -238,11 +241,11 @@ module ALU_tb #(parameter DATA_WIDTH = 32);
             operation_code = 7'b0110011;
             function3 = 3'b101;
             function7 = 7'b0000000;
-            data_in_operand_a = 32'd4566;
-            data_in_operand_b = 32'd450949;
+            data_in_operand_a = DATA_WIDTH'(4566);
+            data_in_operand_b = DATA_WIDTH'(450949);
             
             #5
-            if (data_out == 32'd142) 
+            if (data_out == DATA_WIDTH'(142)) 
                 begin
                      $display("SUCCESS SRL: Expected result (%d) was received correctly", data_out);
                 end
@@ -255,11 +258,11 @@ module ALU_tb #(parameter DATA_WIDTH = 32);
             operation_code = 7'b0110011;
             function3 = 3'b101;
             function7 = 7'b0100000;
-            data_in_operand_a = -32'sd45886;
-            data_in_operand_b = 32'sd6;
+            data_in_operand_a = -DATA_WIDTH'('sd45886);
+            data_in_operand_b = DATA_WIDTH'('sd6);
             
             #5
-            if (data_out == -32'sd717) 
+            if (data_out == -DATA_WIDTH'('sd717)) 
                 begin
                      $display("SUCCESS SRA: Expected result (%d) was received correctly", data_out);
                 end
@@ -272,11 +275,11 @@ module ALU_tb #(parameter DATA_WIDTH = 32);
             operation_code = 7'b0110011;
             function3 = 3'b101;
             function7 = 7'b0100000;
-            data_in_operand_a = 32'sd467665;
-            data_in_operand_b = 32'sd36;
+            data_in_operand_a = DATA_WIDTH'('sd467665);
+            data_in_operand_b = DATA_WIDTH'('sd36);
             
             #5
-            if (data_out == 32'sd29229) 
+            if (data_out == DATA_WIDTH'('sd29229)) 
                 begin
                      $display("SUCCESS SRA: Expected result (%d) was received correctly", data_out);
                 end
@@ -289,11 +292,11 @@ module ALU_tb #(parameter DATA_WIDTH = 32);
             operation_code = 7'b0110011;
             function3 = 3'b110;
             function7 = 7'b0000000;
-            data_in_operand_a = 32'sd0;
-            data_in_operand_b = -32'sd2452;
+            data_in_operand_a = DATA_WIDTH'('sd0);
+            data_in_operand_b = -DATA_WIDTH'('sd2452);
             
             #5
-            if (data_out == -32'sd2452) 
+            if (data_out == -DATA_WIDTH'('sd2452)) 
                 begin
                      $display("SUCCESS OR: Expected result (%d) was received correctly", data_out);
                 end
@@ -306,11 +309,11 @@ module ALU_tb #(parameter DATA_WIDTH = 32);
             operation_code = 7'b0110011;
             function3 = 3'b110;
             function7 = 7'b0000000;
-            data_in_operand_a = -32'sd8667;
-            data_in_operand_b = 32'sd3127;
+            data_in_operand_a = -DATA_WIDTH'('sd8667);
+            data_in_operand_b = DATA_WIDTH'('sd3127);
             
             #5
-            if (data_out == -32'sd8649) 
+            if (data_out == -DATA_WIDTH'('sd8649)) 
                 begin
                      $display("SUCCESS OR: Expected result (%d) was received correctly", data_out);
                 end
@@ -323,11 +326,11 @@ module ALU_tb #(parameter DATA_WIDTH = 32);
             operation_code = 7'b0110011;
             function3 = 3'b110;
             function7 = 7'b0000000;
-            data_in_operand_a = 32'sd0;
-            data_in_operand_b = 32'sd0;
+            data_in_operand_a = '0;
+            data_in_operand_b = '0;
             
             #5
-            if (data_out == 32'sd0) 
+            if (data_out == '0) 
                 begin
                      $display("SUCCESS OR: Expected result (%d) was received correctly", data_out);
                 end
@@ -340,11 +343,11 @@ module ALU_tb #(parameter DATA_WIDTH = 32);
             operation_code = 7'b0110011;
             function3 = 3'b111;
             function7 = 7'b0000000;
-            data_in_operand_a = 32'sd6744;
-            data_in_operand_b = 32'sd1234;
+            data_in_operand_a = DATA_WIDTH'('sd6744);
+            data_in_operand_b = DATA_WIDTH'('sd1234);
             
             #5
-            if (data_out == 32'sd80) 
+            if (data_out == DATA_WIDTH'('sd80)) 
                 begin
                      $display("SUCCESS AND: Expected result (%d) was received correctly", data_out);
                 end
@@ -357,11 +360,11 @@ module ALU_tb #(parameter DATA_WIDTH = 32);
             operation_code = 7'b0110011;
             function3 = 3'b111;
             function7 = 7'b0000000;
-            data_in_operand_a = -32'sd8667;
-            data_in_operand_b = 32'sd3127;
+            data_in_operand_a = -DATA_WIDTH'('sd8667);
+            data_in_operand_b = DATA_WIDTH'('sd3127);
             
             #5
-            if (data_out == 32'sd3109) 
+            if (data_out == DATA_WIDTH'('sd3109))
                 begin
                      $display("SUCCESS AND: Expected result (%d) was received correctly", data_out);
                 end
@@ -374,11 +377,11 @@ module ALU_tb #(parameter DATA_WIDTH = 32);
             operation_code = 7'b0110011;
             function3 = 3'b111;
             function7 = 7'b0000000;
-            data_in_operand_a = 32'sd0;
-            data_in_operand_b = 32'sd31567;
+            data_in_operand_a = '0;
+            data_in_operand_b = DATA_WIDTH'('sd31567);
             
             #5
-            if (data_out == 32'sd0) 
+            if (data_out == '0) 
                 begin
                      $display("SUCCESS AND: Expected result (%d) was received correctly", data_out);
                 end

@@ -1,7 +1,10 @@
 `timescale 1ns / 1ps
 
 
-module Program_Counter #(parameter ADDRESS_WIDTH = 32)
+import CPU_Parameters_Config::*;
+
+
+module Program_Counter #()
 (
     input logic clk,
     input logic reset,
@@ -11,10 +14,12 @@ module Program_Counter #(parameter ADDRESS_WIDTH = 32)
     
     input logic next_address_enable,
     
+    input logic [ADDRESS_WIDTH-1:0] auipc_offset,
+    output logic [ADDRESS_WIDTH-1:0] auipc_offset_address,
     input logic [ADDRESS_WIDTH-1:0] branch_offset,
     input logic [ADDRESS_WIDTH-1:0] jump_jal_offset,
-    input logic [ADDRESS_WIDTH-1:0] jump_jarl_offset,
-    input logic [ADDRESS_WIDTH-1:0] return_address,
+    input logic [ADDRESS_WIDTH-1:0] jump_jalr_target,
+    output logic [ADDRESS_WIDTH-1:0] return_instruction_address,
     
     input logic equal,
     input logic signed_less,
@@ -25,53 +30,49 @@ module Program_Counter #(parameter ADDRESS_WIDTH = 32)
     
     
     logic [ADDRESS_WIDTH-1:0] current_instruction_address;
-    logic [ADDRESS_WIDTH-1:0] return_instruction_address;
-   
-    assign return_address = return_instruction_address;
     
-    initial
-        begin
-            current_instruction_address = '0;
-        end
-        
+    assign return_instruction_address = current_instruction_address + ADDRESS_WIDTH'(4);
+    assign auipc_offset_address = current_instruction_address + auipc_offset;
+     
     
     always_ff @(posedge clk or posedge reset)
         begin
             if (reset)
                 begin
-                    current_instruction_address = 0;
+                    current_instruction_address <= RESET_ADDRESS;
                 end
             else
                 begin
                 if (next_address_enable)
                     begin
                         case (operation_code)
-                        7'b0010111: ;// U block, AUIPC
+                        7'b0010111: // U block, AUIPC
+                            begin
+                                current_instruction_address <= current_instruction_address + ADDRESS_WIDTH'(4);
+                            end
                         7'b1100011: // SB block
                             case (function3)
-                                3'b000: current_instruction_address <= current_instruction_address + (equal == 1 ? branch_offset : 0); // BEQ
-                                3'b001: current_instruction_address <= current_instruction_address + (equal == 0 ? branch_offset : 0); // BNE
-                                3'b100: current_instruction_address <= current_instruction_address + (signed_less == 1 ? branch_offset : 0); // BLT
-                                3'b101: current_instruction_address <= current_instruction_address + (signed_less == 0 ? branch_offset : 0); // BGE
-                                3'b110: current_instruction_address <= current_instruction_address + (unsigned_less == 1 ? branch_offset : 0); // BLTU
-                                3'b111: current_instruction_address <= current_instruction_address + (unsigned_less == 0 ? branch_offset : 0); // BGEU
-                                default: ;
+                                3'b000: current_instruction_address <= current_instruction_address + (equal ? branch_offset : ADDRESS_WIDTH'(4)); // BEQ
+                                3'b001: current_instruction_address <= current_instruction_address + (!equal ? branch_offset : ADDRESS_WIDTH'(4)); // BNE
+                                3'b100: current_instruction_address <= current_instruction_address + (signed_less ? branch_offset : ADDRESS_WIDTH'(4)); // BLT
+                                3'b101: current_instruction_address <= current_instruction_address + (!signed_less ? branch_offset : ADDRESS_WIDTH'(4)); // BGE
+                                3'b110: current_instruction_address <= current_instruction_address + (unsigned_less ? branch_offset : ADDRESS_WIDTH'(4)); // BLTU
+                                3'b111: current_instruction_address <= current_instruction_address + (!unsigned_less? branch_offset : ADDRESS_WIDTH'(4)); // BGEU
+                                default: current_instruction_address <= current_instruction_address + ADDRESS_WIDTH'(4);
                             endcase
                         7'b1100111: // I block
                             case (function3)
-                                3'b000: // JARL
+                                3'b000: // JALR
                                     begin
-                                        return_instruction_address <= current_instruction_address + 3'b100;
-                                        current_instruction_address <= current_instruction_address + jump_jarl_offset;
+                                        current_instruction_address <= jump_jalr_target;
                                     end
-                                default: ;
+                                default: current_instruction_address <= current_instruction_address + ADDRESS_WIDTH'(4);
                             endcase
                         7'b1101111: // UJ block, JAL
                             begin
-                                return_instruction_address <= current_instruction_address + 32'd4;
                                 current_instruction_address <= current_instruction_address + jump_jal_offset;
                             end
-                        default: current_instruction_address <= current_instruction_address + 32'd4;
+                        default: current_instruction_address <= current_instruction_address + ADDRESS_WIDTH'(4);
                     endcase
                     end  
                 end

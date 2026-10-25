@@ -1,7 +1,10 @@
 `timescale 1ns / 1ps
 
 
-module Register_File #(parameter DATA_WIDTH = 32, REGISTER_SELECTION_WIDTH = 5)
+import CPU_Parameters_Config::*;
+
+
+module Register_File #()
 (
     input logic clk,
     
@@ -22,14 +25,14 @@ module Register_File #(parameter DATA_WIDTH = 32, REGISTER_SELECTION_WIDTH = 5)
     
     always_ff @(posedge clk)
         begin
-            if (write_register_enable && write_register_select != 5'd0)
+            if (write_register_enable && write_register_select != '0)
                 begin
                     register[write_register_select] <= write_register_data;
                 end
             if (read_register_enable)
                 begin
-                    read_register_data_1 <= (read_register_select_1 == 5'd0 ? 0 : register[read_register_select_1]);
-                    read_register_data_2 <= (read_register_select_2 == 5'd0 ? 0 : register[read_register_select_2]);
+                    read_register_data_1 <= (read_register_select_1 == '0 ? '0 : register[read_register_select_1]);
+                    read_register_data_2 <= (read_register_select_2 == '0 ? '0 : register[read_register_select_2]);
                 end
         end
     

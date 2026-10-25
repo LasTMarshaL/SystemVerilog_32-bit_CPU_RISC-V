@@ -1,7 +1,10 @@
 `timescale 1ns / 1ps
 
 
-module Instruction_Memory #(parameter ADDRESS_WIDTH = 32, INSTRUCTION_WIDTH = 32, MEMORY_SIZE = 16384)
+import CPU_Parameters_Config::*;
+
+
+module Instruction_Memory #()
 (
     input logic [ADDRESS_WIDTH-1:0] address,
     output logic [INSTRUCTION_WIDTH-1:0] instruction
@@ -16,12 +19,12 @@ module Instruction_Memory #(parameter ADDRESS_WIDTH = 32, INSTRUCTION_WIDTH = 32
         begin
             for (int i = 0; i < MEMORY_SIZE; i++)
                 begin
-                    memory[i] = 32'h00000013; 
+                    memory[i] = INSTRUCTION_WIDTH'('h00000013); 
                 end
             
-            memory[0] = 32'h000123ac;
-            memory[1] = 32'h00ae2317;
-            memory[2] = 32'h471cd320;
+            memory[0] = INSTRUCTION_WIDTH'('h000123ac);
+            memory[1] = INSTRUCTION_WIDTH'('h00ae2317);
+            memory[2] = INSTRUCTION_WIDTH'('h471cd320);
             //$readmemh("CPU_Commands.mem", memory);
         end
         

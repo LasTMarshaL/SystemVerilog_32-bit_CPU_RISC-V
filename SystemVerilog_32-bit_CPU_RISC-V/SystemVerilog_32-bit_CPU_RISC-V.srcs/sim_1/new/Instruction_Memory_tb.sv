@@ -1,7 +1,10 @@
 `timescale 1ns / 1ps
 
 
-module Instruction_Memory_tb #(parameter ADDRESS_WIDTH = 32, INSTRUCTION_WIDTH = 32);
+import CPU_Parameters_Config::*;
+
+
+module Instruction_Memory_tb #();
 
 
     logic [ADDRESS_WIDTH-1:0] address;
@@ -15,10 +18,10 @@ module Instruction_Memory_tb #(parameter ADDRESS_WIDTH = 32, INSTRUCTION_WIDTH =
     
     initial
         begin
-            address = 32'b00000000000000000000000000000000;
+            address = '0;
             #1
             
-            if (instruction == 32'h000123ac)
+            if (instruction == INSTRUCTION_WIDTH'('h000123ac))
                 begin
                     $display("SUCCESS: Expected data (%d) is located in the address cell %d", instruction, address);
                 end
@@ -28,10 +31,10 @@ module Instruction_Memory_tb #(parameter ADDRESS_WIDTH = 32, INSTRUCTION_WIDTH =
                 end
             #200
                 
-            address = 32'b00000000000000000000000000000100;
+            address = ADDRESS_WIDTH'(4);
             #1
             
-            if (instruction == 32'h00ae2317)
+            if (instruction == INSTRUCTION_WIDTH'('h00ae2317))
                 begin
                     $display("SUCCESS: Expected data (%d) is located in the address cell %d", instruction, address);
                 end
@@ -42,10 +45,10 @@ module Instruction_Memory_tb #(parameter ADDRESS_WIDTH = 32, INSTRUCTION_WIDTH =
             #200
                 
 
-           address = 32'b00000000000000000000000000001000;
+           address = ADDRESS_WIDTH'(8);
            #1
 
-           if (instruction == 32'h471cd320)
+           if (instruction == INSTRUCTION_WIDTH'('h471cd320))
                 begin
                     $display("SUCCESS: Expected data (%d) is located in the address cell %d", instruction, address);
                 end
