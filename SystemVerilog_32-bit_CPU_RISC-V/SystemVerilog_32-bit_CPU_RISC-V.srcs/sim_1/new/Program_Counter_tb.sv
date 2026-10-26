@@ -28,6 +28,8 @@ module Program_Counter_tb #();
     
     logic [ADDRESS_WIDTH-1:0] instruction_address;
     
+    logic [ADDRESS_WIDTH-1:0] latched_return_instruction_address;
+    
     
     Program_Counter uut (
         .clk(clk),
@@ -50,7 +52,7 @@ module Program_Counter_tb #();
     
     always
         begin
-            #5 clk = ~clk;
+            #PROPAGATION_DELAY clk = ~clk;
         end
         
         
@@ -62,7 +64,6 @@ module Program_Counter_tb #();
             function3 = '0;
             next_address_enable = 0;
             auipc_offset = '0;
-            auipc_offset_address = '0;
             branch_offset = '0;
             jump_jal_offset = '0;
             jump_jalr_target = '0;  
@@ -70,7 +71,9 @@ module Program_Counter_tb #();
             signed_less = 0;
             unsigned_less = 0;
             
-            #200
+            latched_return_instruction_address = '0;
+            
+            #OPERATION_DURATION
             @(negedge clk)      
             
             reset = 0;
@@ -81,78 +84,354 @@ module Program_Counter_tb #();
             next_address_enable = 0;
             if (instruction_address == ADDRESS_WIDTH'(4))
                 begin
-                    $display("SUCCESS: Expected instruction address (%d) was received correctly", instruction_address);
+                    $display("SUCCESS: Expected instruction address (%d) was received correctly.", instruction_address);
                 end
             else
                 begin
-                    $display("FAIL: Expected instruction address (%d) was not received correctly", instruction_address);
+                    $display("FAIL: Expected instruction address (%d) was not received correctly.", instruction_address);
                 end
             
-            //!\\ - IN PROGRESS!!!
-            /*
-            #200
+            
+            #OPERATION_DURATION // AUIPC
             @(negedge clk)      
             
-            reset = 0;
             next_address_enable = 1;
-            operation_code = 0010111;
+            operation_code = 7'b0010111;
             function3 = '0;
+            auipc_offset = ADDRESS_WIDTH'(400);
             
-            @(posedge clk)
-            #1
+            @(negedge clk)  
             
+            latched_return_instruction_address = return_instruction_address;
             next_address_enable = 0;
-            if (instruction_address == 8'd20)
+            auipc_offset = '0;
+            if (instruction_address == ADDRESS_WIDTH'(8) && latched_return_instruction_address == ADDRESS_WIDTH'(12) && auipc_offset_address == ADDRESS_WIDTH'(408))
                 begin
-                    $display("SUCCESS: Expected instruction address (%d) was received correctly", instruction_address);
+                    $display("SUCCESS: Expected instruction address, latched_return_instruction_address, auipc_offset_address (%d, %d, %d) were received correctly.", instruction_address, latched_return_instruction_address, auipc_offset_address);
                 end
             else
                 begin
-                    $display("FAIL: Expected instruction address (%d) was not received correctly", instruction_address);
+                    $display("FAIL: Expected instruction address, latched_return_instruction_address, auipc_offset_address (%d, %d, %d) were not received correctly.", instruction_address, latched_return_instruction_address, auipc_offset_address);
                 end
                 
-            #200
+            #OPERATION_DURATION // JALR
             @(negedge clk)      
             
-            reset = 1;
+            next_address_enable = 1;
+            operation_code = 7'b1100111;
+            function3 = 3'b000;
+            latched_return_instruction_address = return_instruction_address; 
+            jump_jalr_target = ADDRESS_WIDTH'(52);
+            
+            @(negedge clk) 
+            
             next_address_enable = 0;
-            jump_enable = 0;
-            target_address  = '0;
-            
-            @(posedge clk)
-            #1
-            
-            if (instruction_address == '0)
+            jump_jalr_target = '0;
+            if (instruction_address == ADDRESS_WIDTH'(52) && latched_return_instruction_address == ADDRESS_WIDTH'(12))
                 begin
-                    $display("SUCCESS: Expected instruction address (%d) was received correctly", instruction_address);
+                    $display("SUCCESS: Expected instruction address, latched_return_instruction_address (%d, %d) were received correctly.", instruction_address, latched_return_instruction_address);                           
                 end
             else
                 begin
-                    $display("FAIL: Expected instruction address (%d) was not received correctly", instruction_address);
+                    $display("FAIL: Expected instruction address, latched_return_instruction_address (%d, %d) were not received correctly.", instruction_address, latched_return_instruction_address); 
                 end
+            latched_return_instruction_address = '0;
                 
-            #200
+            #OPERATION_DURATION // JAL
             @(negedge clk)      
+            
+            next_address_enable = 1;
+            operation_code = 7'b1101111;          
+            function3 = '0;
+            latched_return_instruction_address = return_instruction_address;                   
+            jump_jal_offset = ADDRESS_WIDTH'(192);
+            
+           @(negedge clk)
+            
+            next_address_enable = 0;
+            jump_jal_offset = '0;
+            if (instruction_address == ADDRESS_WIDTH'(244) && latched_return_instruction_address == ADDRESS_WIDTH'(56))
+                begin
+                    $display("SUCCESS: Expected instruction address, latched_return_instruction_address (%d, %d) were received correctly.", instruction_address, latched_return_instruction_address);                           
+                end
+            else
+                begin
+                    $display("FAIL: Expected instruction address, latched_return_instruction_address (%d, %d) were not received correctly.", instruction_address, latched_return_instruction_address); 
+                end
+            latched_return_instruction_address = '0;
+            
+            reset = 1; // For convinience in simulation (start SB block checking from 0 address)
+            
+            @(negedge clk)
             
             reset = 0;
-            next_address_enable = 0;
-            jump_enable = 0;
-            target_address  = 29;
             
-            @(posedge clk)
-            #1
+            #OPERATION_DURATION // BEQ
+            @(negedge clk)      
+            
+            next_address_enable = 1;
+            operation_code = 7'b1100011;          
+            function3 = 3'b000;              
+            equal = 1;
+            branch_offset = ADDRESS_WIDTH'(16);
+            
+           @(negedge clk)
             
             next_address_enable = 0;
-            if (instruction_address == '0)
+            equal = 0;
+            if (instruction_address == ADDRESS_WIDTH'(16))
                 begin
-                    $display("SUCCESS: Expected instruction address was not changed", instruction_address);
+                    $display("SUCCESS: Expected instruction address (%d) were received correctly.", instruction_address);                           
                 end
             else
                 begin
-                    $display("FAIL: Expected instruction address (%d) was changed", instruction_address);
+                    $display("FAIL: Expected instruction address (%d) were not received correctly.", instruction_address); 
                 end
-                */
-            #200
+                
+            #OPERATION_DURATION // BEQ
+            @(negedge clk)                 
+            
+            next_address_enable = 1;
+            operation_code = 7'b1100011;          
+            function3 = 3'b000;              
+            equal = 0;
+            branch_offset = ADDRESS_WIDTH'(16);
+            
+           @(negedge clk)
+            
+            next_address_enable = 0;
+            equal = 0;
+            if (instruction_address == ADDRESS_WIDTH'(20))
+                begin
+                    $display("SUCCESS: Expected instruction address (%d) were received correctly.", instruction_address);                           
+                end
+            else
+                begin
+                    $display("FAIL: Expected instruction address (%d) were not received correctly.", instruction_address); 
+                end          
+   
+                
+            #OPERATION_DURATION // BNE
+            @(negedge clk)                 
+            
+            next_address_enable = 1;
+            operation_code = 7'b1100011;          
+            function3 = 3'b001;              
+            equal = 0;
+            branch_offset = ADDRESS_WIDTH'(8);
+            
+           @(negedge clk)
+            
+            next_address_enable = 0;
+            equal = 0;
+            if (instruction_address == ADDRESS_WIDTH'(28))
+                begin
+                    $display("SUCCESS: Expected instruction address (%d) were received correctly.", instruction_address);                           
+                end
+            else
+                begin
+                    $display("FAIL: Expected instruction address (%d) were not received correctly.", instruction_address); 
+                end
+                
+            #OPERATION_DURATION // BNE
+            @(negedge clk)                 
+            
+            next_address_enable = 1;
+            operation_code = 7'b1100011;          
+            function3 = 3'b001;              
+            equal = 1;
+            branch_offset = ADDRESS_WIDTH'(12);
+            
+           @(negedge clk)
+            
+            next_address_enable = 0;
+            equal = 0;
+            if (instruction_address == ADDRESS_WIDTH'(32))
+                begin
+                    $display("SUCCESS: Expected instruction address (%d) were received correctly.", instruction_address);                           
+                end
+            else
+                begin
+                    $display("FAIL: Expected instruction address (%d) were not received correctly.", instruction_address); 
+                end
+                
+            #OPERATION_DURATION // BLT
+            @(negedge clk)                 
+            
+            next_address_enable = 1;
+            operation_code = 7'b1100011;          
+            function3 = 3'b100;              
+            signed_less = 1;
+            branch_offset = ADDRESS_WIDTH'(20);
+            
+           @(negedge clk)
+            
+            next_address_enable = 0;
+            signed_less = 0;
+            if (instruction_address == ADDRESS_WIDTH'(52))
+                begin
+                    $display("SUCCESS: Expected instruction address (%d) were received correctly.", instruction_address);                           
+                end
+            else
+                begin
+                    $display("FAIL: Expected instruction address (%d) were not received correctly.", instruction_address); 
+                end
+                
+            #OPERATION_DURATION // BLT
+            @(negedge clk)                 
+            
+            next_address_enable = 1;
+            operation_code = 7'b1100011;          
+            function3 = 3'b100;              
+            signed_less = 0;
+            branch_offset = ADDRESS_WIDTH'(24);
+            
+           @(negedge clk)
+            
+            next_address_enable = 0;
+            signed_less = 0;
+            if (instruction_address == ADDRESS_WIDTH'(56))
+                begin
+                    $display("SUCCESS: Expected instruction address (%d) were received correctly.", instruction_address);                           
+                end
+            else
+                begin
+                    $display("FAIL: Expected instruction address (%d) were not received correctly.", instruction_address); 
+                end
+                
+            #OPERATION_DURATION // BGE
+            @(negedge clk)                 
+            
+            next_address_enable = 1;
+            operation_code = 7'b1100011;          
+            function3 = 3'b101;              
+            signed_less = 0;
+            branch_offset = ADDRESS_WIDTH'(8);
+            
+           @(negedge clk)
+            
+            next_address_enable = 0;
+            signed_less = 0;
+            if (instruction_address == ADDRESS_WIDTH'(64))
+                begin
+                    $display("SUCCESS: Expected instruction address (%d) were received correctly.", instruction_address);                           
+                end
+            else
+                begin
+                    $display("FAIL: Expected instruction address (%d) were not received correctly.", instruction_address); 
+                end
+                
+            #OPERATION_DURATION // BGE
+            @(negedge clk)                 
+            
+            next_address_enable = 1;
+            operation_code = 7'b1100011;          
+            function3 = 3'b101;              
+            signed_less = 1;
+            branch_offset = ADDRESS_WIDTH'(128);
+            
+           @(negedge clk)
+            
+            next_address_enable = 0;
+            signed_less = 0;
+            if (instruction_address == ADDRESS_WIDTH'(68))
+                begin
+                    $display("SUCCESS: Expected instruction address (%d) were received correctly.", instruction_address);                           
+                end
+            else
+                begin
+                    $display("FAIL: Expected instruction address (%d) were not received correctly.", instruction_address); 
+                end 
+                
+            #OPERATION_DURATION // BLTU
+            @(negedge clk)      
+            
+            next_address_enable = 1;
+            operation_code = 7'b1100011;          
+            function3 = 3'b110;              
+            unsigned_less = 1;
+            branch_offset = ADDRESS_WIDTH'(12);
+            
+           @(negedge clk)
+            
+            next_address_enable = 0;
+            unsigned_less = 0;
+            if (instruction_address == ADDRESS_WIDTH'(80))
+                begin
+                    $display("SUCCESS: Expected instruction address (%d) were received correctly.", instruction_address);                           
+                end
+            else
+                begin
+                    $display("FAIL: Expected instruction address (%d) were not received correctly.", instruction_address); 
+                end
+                
+            #OPERATION_DURATION // BLTU
+            @(negedge clk)                 
+            
+            next_address_enable = 1;
+            operation_code = 7'b1100011;          
+            function3 = 3'b110;              
+            unsigned_less = 0;
+            branch_offset = ADDRESS_WIDTH'(16);
+            
+           @(negedge clk)
+            
+            next_address_enable = 0;
+            unsigned_less = 0;
+            if (instruction_address == ADDRESS_WIDTH'(84))
+                begin
+                    $display("SUCCESS: Expected instruction address (%d) were received correctly.", instruction_address);                           
+                end
+            else
+                begin
+                    $display("FAIL: Expected instruction address (%d) were not received correctly.", instruction_address); 
+                end 
+                
+            #OPERATION_DURATION // BGEU
+            @(negedge clk)      
+            
+            next_address_enable = 1;
+            operation_code = 7'b1100011;          
+            function3 = 3'b111;              
+            unsigned_less = 0;
+            branch_offset = ADDRESS_WIDTH'(16);
+            
+           @(negedge clk)
+            
+            next_address_enable = 0;
+            unsigned_less = 0;
+            if (instruction_address == ADDRESS_WIDTH'(100))
+                begin
+                    $display("SUCCESS: Expected instruction address (%d) were received correctly.", instruction_address);                           
+                end
+            else
+                begin
+                    $display("FAIL: Expected instruction address (%d) were not received correctly.", instruction_address); 
+                end
+                
+            #OPERATION_DURATION // BGEU
+            @(negedge clk)                 
+            
+            next_address_enable = 1;
+            operation_code = 7'b1100011;          
+            function3 = 3'b111;              
+            unsigned_less = 1;
+            branch_offset = ADDRESS_WIDTH'(40);
+            
+           @(negedge clk)
+            
+            next_address_enable = 0;
+            unsigned_less = 0;
+            if (instruction_address == ADDRESS_WIDTH'(104))
+                begin
+                    $display("SUCCESS: Expected instruction address (%d) were received correctly.", instruction_address);                           
+                end
+            else
+                begin
+                    $display("FAIL: Expected instruction address (%d) were not received correctly.", instruction_address); 
+                end 
+                
+            #OPERATION_DURATION 
             $finish;
         end
 

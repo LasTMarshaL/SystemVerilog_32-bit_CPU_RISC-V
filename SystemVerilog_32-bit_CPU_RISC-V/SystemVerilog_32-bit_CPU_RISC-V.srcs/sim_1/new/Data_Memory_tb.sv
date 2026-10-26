@@ -21,6 +21,7 @@ module Data_Memory_tb #();
     logic [DATA_WIDTH-1:0] comparison_result;
     logic [BYTES_NUMBER-1:0] comparison_byte_mask;
     
+    
     Data_Memory uut (
         .clk(clk),
         .write_byte_enable(write_byte_enable),
@@ -33,7 +34,7 @@ module Data_Memory_tb #();
     
     always 
         begin
-            #5 clk = ~clk;
+            #PROPAGATION_DELAY clk = ~clk;
         end
     
     
@@ -49,7 +50,7 @@ module Data_Memory_tb #();
             comparison_result = '0;
             comparison_byte_mask = '0;
             
-            #200
+            #OPERATION_DURATION
             @(negedge clk)
             
             write_byte_enable = BYTES_NUMBER'('b1111);
@@ -59,7 +60,6 @@ module Data_Memory_tb #();
             
             @(negedge clk)
             
-            @(negedge clk);
             write_byte_enable = BYTES_NUMBER'('b0000);
             read_enable = 1;
             
@@ -73,11 +73,11 @@ module Data_Memory_tb #();
             
             if (comparison_result == comparison_data)
                 begin
-                    $display("SUCCESS: Expected data (%d) was written to the address word cell %d", write_data, address[ADDRESS_WIDTH-2:2]);
+                    $display("SUCCESS: Expected data (%d) was written to the address word cell %d.", write_data, address[ADDRESS_WIDTH-2:2]);
                 end
             else
                 begin
-                    $display("FAIL: Expected data (%d) was not written to the address word cell %d", write_data, address[ADDRESS_WIDTH-2:2]);
+                    $display("FAIL: Expected data (%d) was not written to the address word cell %d.", write_data, address[ADDRESS_WIDTH-2:2]);
                 end
                
             @(negedge clk)
@@ -87,7 +87,7 @@ module Data_Memory_tb #();
             comparison_result = '0;
             comparison_byte_mask = '0;
                 
-            #200
+            #OPERATION_DURATION
             @(negedge clk)
             
             write_byte_enable = BYTES_NUMBER'('b1000);
@@ -97,7 +97,6 @@ module Data_Memory_tb #();
             
             @(negedge clk)
             
-            @(negedge clk);
             write_byte_enable = BYTES_NUMBER'('b0000);
             read_enable = 1;
             
@@ -111,20 +110,21 @@ module Data_Memory_tb #();
             
             if (comparison_result == comparison_data)
                 begin
-                    $display("SUCCESS: Expected data (%d) was written to the address word cell %d", write_data, address[ADDRESS_WIDTH-2:2]);
+                    $display("SUCCESS: Expected data (%d) was written to the address word cell %d.", write_data, address[ADDRESS_WIDTH-2:2]);
                 end
             else
                 begin
-                    $display("FAIL: Expected data (%d) was not written to the address word cell %d", write_data, address[ADDRESS_WIDTH-2:2]);
+                    $display("FAIL: Expected data (%d) was not written to the address word cell %d.", write_data, address[ADDRESS_WIDTH-2:2]);
                 end
             
-            @(negedge clk);
+            @(negedge clk)
+            
             read_enable = 0;
             comparison_data = '0;
             comparison_result = '0;
             comparison_byte_mask = '0;
             
-            #200
+            #OPERATION_DURATION
             @(negedge clk)
             
             write_byte_enable = BYTES_NUMBER'('b0110);
@@ -134,8 +134,6 @@ module Data_Memory_tb #();
             
             @(negedge clk)
             
-            @(negedge clk)
-            
             write_byte_enable = BYTES_NUMBER'('b0000); 
             read_enable = 1;
             
@@ -149,11 +147,11 @@ module Data_Memory_tb #();
             
             if (comparison_result == comparison_data)
                 begin
-                    $display("SUCCESS: Expected data (%d) was written to the address word cell %d", write_data, address[ADDRESS_WIDTH-2:2]);
+                    $display("SUCCESS: Expected data (%d) was written to the address word cell %d.", write_data, address[ADDRESS_WIDTH-2:2]);
                 end
             else
                 begin
-                    $display("FAIL: Expected data (%d) was not written to the address word cell %d", write_data, address[ADDRESS_WIDTH-2:2]);
+                    $display("FAIL: Expected data (%d) was not written to the address word cell %d.", write_data, address[ADDRESS_WIDTH-2:2]);
                 end
                 
             @(negedge clk)
@@ -163,15 +161,13 @@ module Data_Memory_tb #();
             comparison_result = '0;
             comparison_byte_mask = '0;
             
-            #200
+            #OPERATION_DURATION
             @(negedge clk)
             
             write_byte_enable = BYTES_NUMBER'('b0101);
             comparison_byte_mask = write_byte_enable;
             address = ADDRESS_WIDTH'(12);
-            write_data = DATA_WIDTH'(15138846);
-            
-            @(negedge clk)
+            write_data = DATA_WIDTH'(15138846);   
             
             @(negedge clk)
             
@@ -188,11 +184,11 @@ module Data_Memory_tb #();
             
             if (comparison_result == comparison_data)
                 begin
-                    $display("SUCCESS: Expected data (%d) was written to the address word cell %d", write_data, address[ADDRESS_WIDTH-2:2]);
+                    $display("SUCCESS: Expected data (%d) was written to the address word cell %d.", write_data, address[ADDRESS_WIDTH-2:2]);
                 end
             else
                 begin
-                    $display("FAIL: Expected data (%d) was not written to the address word cell %d", write_data, address[ADDRESS_WIDTH-2:2]);
+                    $display("FAIL: Expected data (%d) was not written to the address word cell %d.", write_data, address[ADDRESS_WIDTH-2:2]);
                 end
                 
             @(negedge clk)
@@ -202,7 +198,7 @@ module Data_Memory_tb #();
             comparison_result = '0;
             comparison_byte_mask = '0;
             
-            #200
+            #OPERATION_DURATION
             $finish;
         end
     

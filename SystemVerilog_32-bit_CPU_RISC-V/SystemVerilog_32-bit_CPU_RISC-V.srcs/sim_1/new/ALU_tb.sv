@@ -40,357 +40,398 @@ module ALU_tb #();
             data_in_operand_a = '0;
             data_in_operand_b = '0;
             
-            #5
+            #PROPAGATION_DELAY
+            
             if (data_out == '0)
                 begin
-                     $display("SUCCESS DEFAULT: 0 was got correctly");
+                     $display("SUCCESS DEFAULT: 0 was got correctly.");
                 end
             else
                 begin
-                    $display("FAIL DEFAULT: 0 was not got correctly");
+                    $display("FAIL DEFAULT: 0 was not got correctly.");
                 end
             
-            #200 // ADD
+            #OPERATION_DURATION // ADD
+            
             operation_code = 7'b0110011;
             function3 = 3'b000;
             function7 = 7'b0000000;
             data_in_operand_a = DATA_WIDTH'('sd453748);
             data_in_operand_b = DATA_WIDTH'('sd3144556);
             
-            #5
+            #PROPAGATION_DELAY
+            
             if (data_out == DATA_WIDTH'('sd3598304))
                 begin
-                     $display("SUCCESS ADD: Expected result (%d) was received correctly", data_out);
+                     $display("SUCCESS ADD: Expected result (%d) was received correctly.", data_out);
                 end
             else
                 begin
-                    $display("FAIL ADD: Expected result (%d) was not received correctly", data_out);
+                    $display("FAIL ADD: Expected result (%d) was not received correctly.", data_out);
                 end
                 
-            #200 // SUB
+            #OPERATION_DURATION // SUB
+            
             operation_code = 7'b0110011;
             function3 = 3'b000;
             function7 = 7'b0100000;
             data_in_operand_a = DATA_WIDTH'('sd57467);
             data_in_operand_b = DATA_WIDTH'('sd46685);
             
-            #5
+            #PROPAGATION_DELAY
+            
             if (data_out == DATA_WIDTH'('sd10782))
                 begin
-                     $display("SUCCESS SUB: Expected result (%d) was received correctly", data_out);
+                     $display("SUCCESS SUB: Expected result (%d) was received correctly.", data_out);
                 end
             else
                 begin
-                    $display("FAIL SUB: Expected result (%d) was not received correctly", data_out);
+                    $display("FAIL SUB: Expected result (%d) was not received correctly.", data_out);
                 end
                 
-            #200 // SLL
+            #OPERATION_DURATION // SLL
+            
             operation_code = 7'b0110011;
             function3 = 3'b001;
             function7 = 7'b0000000;
             data_in_operand_a = DATA_WIDTH'('sd45425);
             data_in_operand_b = DATA_WIDTH'('sd4);
             
-            #5
+            #PROPAGATION_DELAY
+            
             if (data_out == DATA_WIDTH'('sd726800))
                 begin
-                     $display("SUCCESS SLL: Expected result (%d) was received correctly", data_out);
+                     $display("SUCCESS SLL: Expected result (%d) was received correctly.", data_out);
                 end
             else
                 begin
-                    $display("FAIL SLL: Expected result (%d) was not received correctly", data_out);
+                    $display("FAIL SLL: Expected result (%d) was not received correctly.", data_out);
                 end
                 
-            #200 // SLL
+            #OPERATION_DURATION // SLL
+            
             operation_code = 7'b0110011;
             function3 = 3'b001;
             function7 = 7'b0000000;
             data_in_operand_a = DATA_WIDTH'('sd45425);
             data_in_operand_b = DATA_WIDTH'('sd40);
             
-            #5
+            #PROPAGATION_DELAY
+            
             if (data_out == DATA_WIDTH'('sd11628800))
                 begin
-                     $display("SUCCESS SLL: Expected result (%d) was received correctly", data_out);
+                     $display("SUCCESS SLL: Expected result (%d) was received correctly.", data_out);
                 end
             else
                 begin
-                    $display("FAIL SLL: Expected result (%d) was not received correctly", data_out);
+                    $display("FAIL SLL: Expected result (%d) was not received correctly.", data_out);
                 end
                 
-            #200 // SLT
+            #OPERATION_DURATION // SLT
+            
             operation_code = 7'b0110011;
             function3 = 3'b010;
             function7 = 7'b0000000;
             data_in_operand_a = DATA_WIDTH'('sd34);
             data_in_operand_b = DATA_WIDTH'('sd45355);
             
-            #5
+            #PROPAGATION_DELAY
+            
             if (data_out == DATA_WIDTH'(1)) 
                 begin
-                     $display("SUCCESS STL: Expected result (%d) was received correctly", data_out);
+                     $display("SUCCESS STL: Expected result (%d) was received correctly.", data_out);
                 end
             else
                 begin
-                    $display("FAIL STL: Expected result (%d) was not received correctly", data_out);
+                    $display("FAIL STL: Expected result (%d) was not received correctly.", data_out);
                 end
                 
-            #200 // SLT
+            #OPERATION_DURATION // SLT
+            
             operation_code = 7'b0110011;
             function3 = 3'b010;
             function7 = 7'b0000000;
             data_in_operand_a = DATA_WIDTH'('sd341578);
             data_in_operand_b = DATA_WIDTH'('sd47495);
             
-            #5
+            #PROPAGATION_DELAY
+            
             if (data_out == '0) 
                 begin
-                     $display("SUCCESS STL: Expected result (%d) was received correctly", data_out);
+                     $display("SUCCESS STL: Expected result (%d) was received correctly.", data_out);
                 end
             else
                 begin
-                    $display("FAIL STL: Expected result (%d) was not received correctly", data_out);
+                    $display("FAIL STL: Expected result (%d) was not received correctly.", data_out);
                 end
                 
-            #200 // SLTU
+            #OPERATION_DURATION // SLTU
+            
             operation_code = 7'b0110011;
             function3 = 3'b011;
             function7 = 7'b0000000;
             data_in_operand_a = DATA_WIDTH'(34256);
             data_in_operand_b = DATA_WIDTH'(7468946);
             
-            #5
+            #PROPAGATION_DELAY
+            
             if (data_out == DATA_WIDTH'(1)) 
                 begin
-                     $display("SUCCESS STLU: Expected result (%d) was received correctly", data_out);
+                     $display("SUCCESS STLU: Expected result (%d) was received correctly.", data_out);
                 end
             else
                 begin
-                    $display("FAIL STLU: Expected result (%d) was not received correctly", data_out);
+                    $display("FAIL STLU: Expected result (%d) was not received correctly.", data_out);
                 end
                 
-            #200 // SLTU
+            #OPERATION_DURATION // SLTU
+            
             operation_code = 7'b0110011;
             function3 = 3'b011;
             function7 = 7'b0000000;
             data_in_operand_a = DATA_WIDTH'(3425635);
             data_in_operand_b = DATA_WIDTH'(74686);
             
-            #5
+            #PROPAGATION_DELAY
+            
             if (data_out == '0) 
                 begin
-                     $display("SUCCESS STLU: Expected result (%d) was received correctly", data_out);
+                     $display("SUCCESS STLU: Expected result (%d) was received correctly.", data_out);
                 end
             else
                 begin
-                    $display("FAIL STLU: Expected result (%d) was not received correctly", data_out);
+                    $display("FAIL STLU: Expected result (%d) was not received correctly.", data_out);
                 end
                 
-            #200 // XOR
+            #OPERATION_DURATION // XOR
+            
             operation_code = 7'b0110011;
             function3 = 3'b100;
             function7 = 7'b0000000;
             data_in_operand_a = DATA_WIDTH'('sd341578);
             data_in_operand_b = DATA_WIDTH'('sd231345);
             
-            #5
+            #PROPAGATION_DELAY
+            
             if (data_out == DATA_WIDTH'('sd438779)) 
                 begin
-                     $display("SUCCESS XOR: Expected result (%d) was received correctly", data_out);
+                     $display("SUCCESS XOR: Expected result (%d) was received correctly.", data_out);
                 end
             else
                 begin
-                    $display("FAIL XOR: Expected result (%d) was not received correctly", data_out);
+                    $display("FAIL XOR: Expected result (%d) was not received correctly.", data_out);
                 end
                 
-            #200 // XOR
+            #OPERATION_DURATION // XOR
+            
             operation_code = 7'b0110011;
             function3 = 3'b100;
             function7 = 7'b0000000;
             data_in_operand_a = DATA_WIDTH'('sd42665);
             data_in_operand_b = DATA_WIDTH'('sd42665);
             
-            #5
+            #PROPAGATION_DELAY
+            
             if (data_out == '0) 
                 begin
-                     $display("SUCCESS XOR: Expected result (%d) was received correctly", data_out);
+                     $display("SUCCESS XOR: Expected result (%d) was received correctly.", data_out);
                 end
             else
                 begin
-                    $display("FAIL XOR: Expected result (%d) was not received correctly", data_out);
+                    $display("FAIL XOR: Expected result (%d) was not received correctly.", data_out);
                 end
                 
-            #200 // SRL
+            #OPERATION_DURATION // SRL
+            
             operation_code = 7'b0110011;
             function3 = 3'b101;
             function7 = 7'b0000000;
             data_in_operand_a = DATA_WIDTH'(324450);
             data_in_operand_b = DATA_WIDTH'(3);
             
-            #5
+            #PROPAGATION_DELAY
+            
             if (data_out == DATA_WIDTH'(40556)) 
                 begin
-                     $display("SUCCESS SRL: Expected result (%d) was received correctly", data_out);
+                     $display("SUCCESS SRL: Expected result (%d) was received correctly.", data_out);
                 end
             else
                 begin
-                    $display("FAIL SRL: Expected result (%d) was not received correctly", data_out);
+                    $display("FAIL SRL: Expected result (%d) was not received correctly.", data_out);
                 end
                 
-            #200 // SRL
+            #OPERATION_DURATION // SRL
+            
             operation_code = 7'b0110011;
             function3 = 3'b101;
             function7 = 7'b0000000;
             data_in_operand_a = DATA_WIDTH'(4566);
             data_in_operand_b = DATA_WIDTH'(450949);
             
-            #5
+            #PROPAGATION_DELAY
+            
             if (data_out == DATA_WIDTH'(142)) 
                 begin
-                     $display("SUCCESS SRL: Expected result (%d) was received correctly", data_out);
+                     $display("SUCCESS SRL: Expected result (%d) was received correctly.", data_out);
                 end
             else
                 begin
-                    $display("FAIL SRL: Expected result (%d) was not received correctly", data_out);
+                    $display("FAIL SRL: Expected result (%d) was not received correctly.", data_out);
                 end
                 
-            #200 // SRA
+            #OPERATION_DURATION // SRA
+            
             operation_code = 7'b0110011;
             function3 = 3'b101;
             function7 = 7'b0100000;
             data_in_operand_a = -DATA_WIDTH'('sd45886);
             data_in_operand_b = DATA_WIDTH'('sd6);
             
-            #5
+            #PROPAGATION_DELAY
+            
             if (data_out == -DATA_WIDTH'('sd717)) 
                 begin
-                     $display("SUCCESS SRA: Expected result (%d) was received correctly", data_out);
+                     $display("SUCCESS SRA: Expected result (%d) was received correctly.", data_out);
                 end
             else
                 begin
-                    $display("FAIL SRA: Expected result (%d) was not received correctly", data_out);
+                    $display("FAIL SRA: Expected result (%d) was not received correctly.", data_out);
                 end
                 
-            #200 // SRA
+            #OPERATION_DURATION // SRA
+            
             operation_code = 7'b0110011;
             function3 = 3'b101;
             function7 = 7'b0100000;
             data_in_operand_a = DATA_WIDTH'('sd467665);
             data_in_operand_b = DATA_WIDTH'('sd36);
             
-            #5
+            #PROPAGATION_DELAY
+            
             if (data_out == DATA_WIDTH'('sd29229)) 
                 begin
-                     $display("SUCCESS SRA: Expected result (%d) was received correctly", data_out);
+                     $display("SUCCESS SRA: Expected result (%d) was received correctly.", data_out);
                 end
             else
                 begin
-                    $display("FAIL SRA: Expected result (%d) was not received correctly", data_out);
+                    $display("FAIL SRA: Expected result (%d) was not received correctly.", data_out);
                 end
             
-            #200 // OR
+            #OPERATION_DURATION // OR
+            
             operation_code = 7'b0110011;
             function3 = 3'b110;
             function7 = 7'b0000000;
             data_in_operand_a = DATA_WIDTH'('sd0);
             data_in_operand_b = -DATA_WIDTH'('sd2452);
             
-            #5
+            #PROPAGATION_DELAY
+            
             if (data_out == -DATA_WIDTH'('sd2452)) 
                 begin
-                     $display("SUCCESS OR: Expected result (%d) was received correctly", data_out);
+                     $display("SUCCESS OR: Expected result (%d) was received correctly.", data_out);
                 end
             else
                 begin
-                    $display("FAIL OR: Expected result (%d) was not received correctly", data_out);
+                    $display("FAIL OR: Expected result (%d) was not received correctly.", data_out);
                 end
                 
-            #200 // OR
+            #OPERATION_DURATION // OR
+            
             operation_code = 7'b0110011;
             function3 = 3'b110;
             function7 = 7'b0000000;
             data_in_operand_a = -DATA_WIDTH'('sd8667);
             data_in_operand_b = DATA_WIDTH'('sd3127);
             
-            #5
+            #PROPAGATION_DELAY
+            
             if (data_out == -DATA_WIDTH'('sd8649)) 
                 begin
-                     $display("SUCCESS OR: Expected result (%d) was received correctly", data_out);
+                     $display("SUCCESS OR: Expected result (%d) was received correctly.", data_out);
                 end
             else
                 begin
-                    $display("FAIL OR: Expected result (%d) was not received correctly", data_out);
+                    $display("FAIL OR: Expected result (%d) was not received correctly.", data_out);
                 end
                 
-            #200 // OR
+            #OPERATION_DURATION // OR
+            
             operation_code = 7'b0110011;
             function3 = 3'b110;
             function7 = 7'b0000000;
             data_in_operand_a = '0;
             data_in_operand_b = '0;
             
-            #5
+            #PROPAGATION_DELAY
+            
             if (data_out == '0) 
                 begin
-                     $display("SUCCESS OR: Expected result (%d) was received correctly", data_out);
+                     $display("SUCCESS OR: Expected result (%d) was received correctly.", data_out);
                 end
             else
                 begin
-                    $display("FAIL OR: Expected result (%d) was not received correctly", data_out);
+                    $display("FAIL OR: Expected result (%d) was not received correctly.", data_out);
                 end
             
-            #200 // AND
+            #OPERATION_DURATION // AND
+            
             operation_code = 7'b0110011;
             function3 = 3'b111;
             function7 = 7'b0000000;
             data_in_operand_a = DATA_WIDTH'('sd6744);
             data_in_operand_b = DATA_WIDTH'('sd1234);
             
-            #5
+            #PROPAGATION_DELAY
+            
             if (data_out == DATA_WIDTH'('sd80)) 
                 begin
-                     $display("SUCCESS AND: Expected result (%d) was received correctly", data_out);
+                     $display("SUCCESS AND: Expected result (%d) was received correctly.", data_out);
                 end
             else
                 begin
-                    $display("FAIL AND: Expected result (%d) was not received correctly", data_out);
+                    $display("FAIL AND: Expected result (%d) was not received correctly.", data_out);
                 end
             
-            #200 // AND
+            #OPERATION_DURATION // AND
+            
             operation_code = 7'b0110011;
             function3 = 3'b111;
             function7 = 7'b0000000;
             data_in_operand_a = -DATA_WIDTH'('sd8667);
             data_in_operand_b = DATA_WIDTH'('sd3127);
             
-            #5
+            #PROPAGATION_DELAY
+            
             if (data_out == DATA_WIDTH'('sd3109))
                 begin
-                     $display("SUCCESS AND: Expected result (%d) was received correctly", data_out);
+                     $display("SUCCESS AND: Expected result (%d) was received correctly.", data_out);
                 end
             else
                 begin
-                    $display("FAIL AND: Expected result (%d) was not received correctly", data_out);
+                    $display("FAIL AND: Expected result (%d) was not received correctly.", data_out);
                 end
             
-            #200 // AND
+            #OPERATION_DURATION // AND
+            
             operation_code = 7'b0110011;
             function3 = 3'b111;
             function7 = 7'b0000000;
             data_in_operand_a = '0;
             data_in_operand_b = DATA_WIDTH'('sd31567);
             
-            #5
+            #PROPAGATION_DELAY
+            
             if (data_out == '0) 
                 begin
-                     $display("SUCCESS AND: Expected result (%d) was received correctly", data_out);
+                     $display("SUCCESS AND: Expected result (%d) was received correctly.", data_out);
                 end
             else
                 begin
-                    $display("FAIL AND: Expected result (%d) was not received correctly", data_out);
+                    $display("FAIL AND: Expected result (%d) was not received correctly.", data_out);
                 end
                 
-            #200
+            #OPERATION_DURATION
             $finish;
         end
 

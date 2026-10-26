@@ -35,7 +35,7 @@ module Register_File_tb #();
     
     always
         begin
-            #5 clk = ~clk;
+            #PROPAGATION_DELAY clk = ~clk;
         end
         
     
@@ -49,7 +49,7 @@ module Register_File_tb #();
             read_register_select_1 = '0;
             read_register_select_2 = '0;          
             
-            #200
+            #OPERATION_DURATION
             @(negedge clk)
             
             write_register_enable = 1;
@@ -67,14 +67,14 @@ module Register_File_tb #();
             
             if (read_register_data_1 == '0)
                 begin
-                    $display("SUCCESS: Register 0 was kept unchanged");
+                    $display("SUCCESS: Register 0 was kept unchanged.");
                 end
             else
                 begin
-                    $display("FAIL: Register 0 was not kept unchanged");
+                    $display("FAIL: Register 0 was not kept unchanged.");
                 end
             
-            #200
+            #OPERATION_DURATION
             @(negedge clk)
             
             write_register_enable = 1;
@@ -92,14 +92,14 @@ module Register_File_tb #();
             
             if (read_register_data_2 == write_register_data)
                 begin
-                    $display("SUCCESS: Number %d was written in register %d", write_register_data, write_register_select);
+                    $display("SUCCESS: Number %d was written in register %d.", write_register_data, write_register_select);
                 end
             else
                 begin
-                    $display("FAIL: Number %d was not written in register %d", write_register_data, write_register_select);
+                    $display("FAIL: Number %d was not written in register %d.", write_register_data, write_register_select);
                 end
                 
-            #200
+            #OPERATION_DURATION
             @(negedge clk)
             
             write_register_enable = 0;
@@ -117,14 +117,14 @@ module Register_File_tb #();
             
             if (read_register_data_2 == -DATA_WIDTH'('sd38))
                 begin
-                    $display("SUCCESS: Register %d was kept unchanged", write_register_select);
+                    $display("SUCCESS: Register %d was kept unchanged.", write_register_select);
                 end
             else
                 begin
-                    $display("FAIL: Register %d was not kept unchanged", write_register_select);
+                    $display("FAIL: Register %d was not kept unchanged.", write_register_select);
                 end
                 
-            #200
+            #OPERATION_DURATION
             @(negedge clk)
             
             write_register_enable = 1;
@@ -138,7 +138,7 @@ module Register_File_tb #();
             read_register_enable = 1;
             read_register_select_1 = REGISTER_SELECTION_WIDTH'(18);
             
-            #200
+            #OPERATION_DURATION
             @(negedge clk)
             
             write_register_enable = 1;
@@ -156,14 +156,14 @@ module Register_File_tb #();
             
             if (read_register_data_2 == DATA_WIDTH'('sd134) && read_register_data_1 == -DATA_WIDTH'('sd535))
                 begin
-                    $display("SUCCESS: Both registors got and gave rigth data");
+                    $display("SUCCESS: Both registors got and gave rigth data.");
                 end
             else
                 begin
-                    $display("FAIL: Both registors didn't get and give rigth data");
+                    $display("FAIL: Both registors didn't get and give rigth data.");
                 end
                 
-            #200
+            #OPERATION_DURATION
             $finish;
         end    
 

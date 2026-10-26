@@ -19,42 +19,46 @@ module Instruction_Memory_tb #();
     initial
         begin
             address = '0;
-            #1
+            
+            #PROPAGATION_DELAY
             
             if (instruction == INSTRUCTION_WIDTH'('h000123ac))
                 begin
-                    $display("SUCCESS: Expected data (%d) is located in the address cell %d", instruction, address);
+                    $display("SUCCESS: Expected data (%d) is located in the address cell %d.", instruction, address);
                 end
             else
                 begin
-                    $display("FAIL: Expected data (%d) is not located in the address cell %d", instruction, address);
+                    $display("FAIL: Expected data (%d) is not located in the address cell %d.", instruction, address);
                 end
-            #200
+                
+            #OPERATION_DURATION
                 
             address = ADDRESS_WIDTH'(4);
-            #1
+            
+            #PROPAGATION_DELAY
             
             if (instruction == INSTRUCTION_WIDTH'('h00ae2317))
                 begin
-                    $display("SUCCESS: Expected data (%d) is located in the address cell %d", instruction, address);
+                    $display("SUCCESS: Expected data (%d) is located in the address cell %d.", instruction, address);
                 end
             else
                 begin
-                    $display("FAIL: Expected data (%d) is not located in the address cell %d", instruction, address);
+                    $display("FAIL: Expected data (%d) is not located in the address cell %d.", instruction, address);
                 end
-            #200
                 
+            #OPERATION_DURATION
 
            address = ADDRESS_WIDTH'(8);
-           #1
+           
+           #PROPAGATION_DELAY
 
            if (instruction == INSTRUCTION_WIDTH'('h471cd320))
                 begin
-                    $display("SUCCESS: Expected data (%d) is located in the address cell %d", instruction, address);
+                    $display("SUCCESS: Expected data (%d) is located in the address cell %d.", instruction, address);
                 end
            else
                 begin
-                    $display("FAIL: Expected data (%d) is not located in the address cell %d", instruction, address);
+                    $display("FAIL: Expected data (%d) is not located in the address cell %d.", instruction, address);
                 end
                 
            #200 $finish;
