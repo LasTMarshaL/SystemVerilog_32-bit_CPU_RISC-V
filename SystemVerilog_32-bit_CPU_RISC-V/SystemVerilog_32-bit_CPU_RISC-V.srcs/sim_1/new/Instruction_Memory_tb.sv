@@ -4,7 +4,7 @@
 import CPU_Parameters_Config::*;
 
 
-module Instruction_Memory_tb #();
+module Instruction_Memory_tb;
 
 
     logic [ADDRESS_WIDTH-1:0] address;

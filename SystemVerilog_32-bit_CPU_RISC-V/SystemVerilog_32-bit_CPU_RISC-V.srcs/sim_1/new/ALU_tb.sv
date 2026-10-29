@@ -4,12 +4,12 @@
 import CPU_Parameters_Config::*;
 
 
-module ALU_tb #();
+module ALU_tb;
 
 
-    logic [6:0] operation_code;
-    logic [2:0] function3;
-    logic [6:0] function7;
+    logic [OPERATION_CODE-1:0] operation_code;
+    logic [FUNCTION_THREE-1:0] function3;
+    logic [FUNCTION_SEVEN-1:0] function7;
     
     logic [DATA_WIDTH-1:0] data_in_operand_a;
     logic [DATA_WIDTH-1:0] data_in_operand_b;
@@ -53,9 +53,9 @@ module ALU_tb #();
             
             #OPERATION_DURATION // ADD
             
-            operation_code = 7'b0110011;
-            function3 = 3'b000;
-            function7 = 7'b0000000;
+            operation_code = OPERATION_CODE'('b0110011);
+            function3 = FUNCTION_THREE'('b000);
+            function7 = '0;
             data_in_operand_a = DATA_WIDTH'('sd453748);
             data_in_operand_b = DATA_WIDTH'('sd3144556);
             
@@ -72,9 +72,9 @@ module ALU_tb #();
                 
             #OPERATION_DURATION // SUB
             
-            operation_code = 7'b0110011;
-            function3 = 3'b000;
-            function7 = 7'b0100000;
+            operation_code = OPERATION_CODE'('b0110011);
+            function3 = FUNCTION_THREE'('b000);
+            function7 = FUNCTION_SEVEN'('b0100000);
             data_in_operand_a = DATA_WIDTH'('sd57467);
             data_in_operand_b = DATA_WIDTH'('sd46685);
             
@@ -91,9 +91,9 @@ module ALU_tb #();
                 
             #OPERATION_DURATION // SLL
             
-            operation_code = 7'b0110011;
-            function3 = 3'b001;
-            function7 = 7'b0000000;
+            operation_code = OPERATION_CODE'('b0110011);
+            function3 = FUNCTION_THREE'('b001);
+            function7 = '0;
             data_in_operand_a = DATA_WIDTH'('sd45425);
             data_in_operand_b = DATA_WIDTH'('sd4);
             
@@ -110,9 +110,9 @@ module ALU_tb #();
                 
             #OPERATION_DURATION // SLL
             
-            operation_code = 7'b0110011;
-            function3 = 3'b001;
-            function7 = 7'b0000000;
+            operation_code = OPERATION_CODE'('b0110011);
+            function3 = FUNCTION_THREE'('b001);
+            function7 = '0;
             data_in_operand_a = DATA_WIDTH'('sd45425);
             data_in_operand_b = DATA_WIDTH'('sd40);
             
@@ -129,9 +129,9 @@ module ALU_tb #();
                 
             #OPERATION_DURATION // SLT
             
-            operation_code = 7'b0110011;
-            function3 = 3'b010;
-            function7 = 7'b0000000;
+            operation_code = OPERATION_CODE'('b0110011);
+            function3 = FUNCTION_THREE'('b010);
+            function7 = '0;
             data_in_operand_a = DATA_WIDTH'('sd34);
             data_in_operand_b = DATA_WIDTH'('sd45355);
             
@@ -148,9 +148,9 @@ module ALU_tb #();
                 
             #OPERATION_DURATION // SLT
             
-            operation_code = 7'b0110011;
-            function3 = 3'b010;
-            function7 = 7'b0000000;
+            operation_code = OPERATION_CODE'('b0110011);
+            function3 = FUNCTION_THREE'('b010);
+            function7 = '0;
             data_in_operand_a = DATA_WIDTH'('sd341578);
             data_in_operand_b = DATA_WIDTH'('sd47495);
             
@@ -167,9 +167,9 @@ module ALU_tb #();
                 
             #OPERATION_DURATION // SLTU
             
-            operation_code = 7'b0110011;
-            function3 = 3'b011;
-            function7 = 7'b0000000;
+            operation_code = OPERATION_CODE'('b0110011);
+            function3 = FUNCTION_THREE'('b011);
+            function7 = '0;
             data_in_operand_a = DATA_WIDTH'(34256);
             data_in_operand_b = DATA_WIDTH'(7468946);
             
@@ -186,9 +186,9 @@ module ALU_tb #();
                 
             #OPERATION_DURATION // SLTU
             
-            operation_code = 7'b0110011;
-            function3 = 3'b011;
-            function7 = 7'b0000000;
+            operation_code = OPERATION_CODE'('b0110011);
+            function3 = FUNCTION_THREE'('b011);
+            function7 = '0;
             data_in_operand_a = DATA_WIDTH'(3425635);
             data_in_operand_b = DATA_WIDTH'(74686);
             
@@ -205,9 +205,9 @@ module ALU_tb #();
                 
             #OPERATION_DURATION // XOR
             
-            operation_code = 7'b0110011;
-            function3 = 3'b100;
-            function7 = 7'b0000000;
+            operation_code = OPERATION_CODE'('b0110011);
+            function3 = FUNCTION_THREE'('b100);
+            function7 = '0;
             data_in_operand_a = DATA_WIDTH'('sd341578);
             data_in_operand_b = DATA_WIDTH'('sd231345);
             
@@ -224,9 +224,9 @@ module ALU_tb #();
                 
             #OPERATION_DURATION // XOR
             
-            operation_code = 7'b0110011;
-            function3 = 3'b100;
-            function7 = 7'b0000000;
+            operation_code = OPERATION_CODE'('b0110011);
+            function3 = FUNCTION_THREE'('b100);
+            function7 = '0;
             data_in_operand_a = DATA_WIDTH'('sd42665);
             data_in_operand_b = DATA_WIDTH'('sd42665);
             
@@ -243,9 +243,9 @@ module ALU_tb #();
                 
             #OPERATION_DURATION // SRL
             
-            operation_code = 7'b0110011;
-            function3 = 3'b101;
-            function7 = 7'b0000000;
+            operation_code = OPERATION_CODE'('b0110011);
+            function3 = FUNCTION_THREE'('b101);
+            function7 = '0;
             data_in_operand_a = DATA_WIDTH'(324450);
             data_in_operand_b = DATA_WIDTH'(3);
             
@@ -262,9 +262,9 @@ module ALU_tb #();
                 
             #OPERATION_DURATION // SRL
             
-            operation_code = 7'b0110011;
-            function3 = 3'b101;
-            function7 = 7'b0000000;
+            operation_code = OPERATION_CODE'('b0110011);
+            function3 = FUNCTION_THREE'('b101);
+            function7 = '0;
             data_in_operand_a = DATA_WIDTH'(4566);
             data_in_operand_b = DATA_WIDTH'(450949);
             
@@ -281,9 +281,9 @@ module ALU_tb #();
                 
             #OPERATION_DURATION // SRA
             
-            operation_code = 7'b0110011;
-            function3 = 3'b101;
-            function7 = 7'b0100000;
+            operation_code = OPERATION_CODE'('b0110011);
+            function3 = FUNCTION_THREE'('b101);
+            function7 = FUNCTION_SEVEN'('b0100000);
             data_in_operand_a = -DATA_WIDTH'('sd45886);
             data_in_operand_b = DATA_WIDTH'('sd6);
             
@@ -300,9 +300,9 @@ module ALU_tb #();
                 
             #OPERATION_DURATION // SRA
             
-            operation_code = 7'b0110011;
-            function3 = 3'b101;
-            function7 = 7'b0100000;
+            operation_code = OPERATION_CODE'('b0110011);
+            function3 = FUNCTION_THREE'('b101);
+            function7 = FUNCTION_SEVEN'('b0100000);
             data_in_operand_a = DATA_WIDTH'('sd467665);
             data_in_operand_b = DATA_WIDTH'('sd36);
             
@@ -319,9 +319,9 @@ module ALU_tb #();
             
             #OPERATION_DURATION // OR
             
-            operation_code = 7'b0110011;
-            function3 = 3'b110;
-            function7 = 7'b0000000;
+            operation_code = OPERATION_CODE'('b0110011);
+            function3 = FUNCTION_THREE'('b110);
+            function7 = '0;
             data_in_operand_a = DATA_WIDTH'('sd0);
             data_in_operand_b = -DATA_WIDTH'('sd2452);
             
@@ -338,9 +338,9 @@ module ALU_tb #();
                 
             #OPERATION_DURATION // OR
             
-            operation_code = 7'b0110011;
-            function3 = 3'b110;
-            function7 = 7'b0000000;
+            operation_code = OPERATION_CODE'('b0110011);
+            function3 = FUNCTION_THREE'('b110);
+            function7 = '0;
             data_in_operand_a = -DATA_WIDTH'('sd8667);
             data_in_operand_b = DATA_WIDTH'('sd3127);
             
@@ -357,9 +357,9 @@ module ALU_tb #();
                 
             #OPERATION_DURATION // OR
             
-            operation_code = 7'b0110011;
-            function3 = 3'b110;
-            function7 = 7'b0000000;
+            operation_code = OPERATION_CODE'('b0110011);
+            function3 = FUNCTION_THREE'('b110);
+            function7 = '0;
             data_in_operand_a = '0;
             data_in_operand_b = '0;
             
@@ -376,9 +376,9 @@ module ALU_tb #();
             
             #OPERATION_DURATION // AND
             
-            operation_code = 7'b0110011;
-            function3 = 3'b111;
-            function7 = 7'b0000000;
+            operation_code = OPERATION_CODE'('b0110011);
+            function3 = FUNCTION_THREE'('b111);
+            function7 = '0;
             data_in_operand_a = DATA_WIDTH'('sd6744);
             data_in_operand_b = DATA_WIDTH'('sd1234);
             
@@ -395,9 +395,9 @@ module ALU_tb #();
             
             #OPERATION_DURATION // AND
             
-            operation_code = 7'b0110011;
-            function3 = 3'b111;
-            function7 = 7'b0000000;
+            operation_code = OPERATION_CODE'('b0110011);
+            function3 = FUNCTION_THREE'('b111);
+            function7 = '0;
             data_in_operand_a = -DATA_WIDTH'('sd8667);
             data_in_operand_b = DATA_WIDTH'('sd3127);
             
@@ -414,9 +414,9 @@ module ALU_tb #();
             
             #OPERATION_DURATION // AND
             
-            operation_code = 7'b0110011;
-            function3 = 3'b111;
-            function7 = 7'b0000000;
+            operation_code = OPERATION_CODE'('b0110011);
+            function3 = FUNCTION_THREE'('b111);
+            function7 = '0;
             data_in_operand_a = '0;
             data_in_operand_b = DATA_WIDTH'('sd31567);
             

@@ -4,7 +4,7 @@
 import CPU_Parameters_Config::*;
 
 
-module Data_Memory_tb #();
+module Data_Memory_tb;
 
 
     logic clk;

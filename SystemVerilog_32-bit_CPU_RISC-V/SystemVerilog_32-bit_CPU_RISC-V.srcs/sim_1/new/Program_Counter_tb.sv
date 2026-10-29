@@ -4,14 +4,14 @@
 import CPU_Parameters_Config::*;
 
 
-module Program_Counter_tb #();
+module Program_Counter_tb;
 
 
     logic clk;
     logic reset;
     
-    logic [6:0] operation_code;
-    logic [2:0] function3;
+    logic [OPERATION_CODE-1:0] operation_code;
+    logic [FUNCTION_THREE-1:0] function3;
     
     logic next_address_enable;
     
@@ -96,7 +96,7 @@ module Program_Counter_tb #();
             @(negedge clk)      
             
             next_address_enable = 1;
-            operation_code = 7'b0010111;
+            operation_code = OPERATION_CODE'('b0010111);
             function3 = '0;
             auipc_offset = ADDRESS_WIDTH'(400);
             
@@ -118,8 +118,8 @@ module Program_Counter_tb #();
             @(negedge clk)      
             
             next_address_enable = 1;
-            operation_code = 7'b1100111;
-            function3 = 3'b000;
+            operation_code = OPERATION_CODE'('b1100111);
+            function3 = FUNCTION_THREE'('b000);
             latched_return_instruction_address = return_instruction_address; 
             jump_jalr_target = ADDRESS_WIDTH'(52);
             
@@ -141,7 +141,7 @@ module Program_Counter_tb #();
             @(negedge clk)      
             
             next_address_enable = 1;
-            operation_code = 7'b1101111;          
+            operation_code = OPERATION_CODE'('b1101111);          
             function3 = '0;
             latched_return_instruction_address = return_instruction_address;                   
             jump_jal_offset = ADDRESS_WIDTH'(192);
@@ -170,8 +170,8 @@ module Program_Counter_tb #();
             @(negedge clk)      
             
             next_address_enable = 1;
-            operation_code = 7'b1100011;          
-            function3 = 3'b000;              
+            operation_code = OPERATION_CODE'('b1100011);          
+            function3 = FUNCTION_THREE'('b000);              
             equal = 1;
             branch_offset = ADDRESS_WIDTH'(16);
             
@@ -192,8 +192,8 @@ module Program_Counter_tb #();
             @(negedge clk)                 
             
             next_address_enable = 1;
-            operation_code = 7'b1100011;          
-            function3 = 3'b000;              
+            operation_code = OPERATION_CODE'('b1100011);          
+            function3 = FUNCTION_THREE'('b000);              
             equal = 0;
             branch_offset = ADDRESS_WIDTH'(16);
             
@@ -215,8 +215,8 @@ module Program_Counter_tb #();
             @(negedge clk)                 
             
             next_address_enable = 1;
-            operation_code = 7'b1100011;          
-            function3 = 3'b001;              
+            operation_code = OPERATION_CODE'('b1100011);          
+            function3 = FUNCTION_THREE'('b001);              
             equal = 0;
             branch_offset = ADDRESS_WIDTH'(8);
             
@@ -237,8 +237,8 @@ module Program_Counter_tb #();
             @(negedge clk)                 
             
             next_address_enable = 1;
-            operation_code = 7'b1100011;          
-            function3 = 3'b001;              
+            operation_code = OPERATION_CODE'('b1100011);          
+            function3 = FUNCTION_THREE'('b001);              
             equal = 1;
             branch_offset = ADDRESS_WIDTH'(12);
             
@@ -259,8 +259,8 @@ module Program_Counter_tb #();
             @(negedge clk)                 
             
             next_address_enable = 1;
-            operation_code = 7'b1100011;          
-            function3 = 3'b100;              
+            operation_code = OPERATION_CODE'('b1100011);          
+            function3 = FUNCTION_THREE'('b100);              
             signed_less = 1;
             branch_offset = ADDRESS_WIDTH'(20);
             
@@ -281,8 +281,8 @@ module Program_Counter_tb #();
             @(negedge clk)                 
             
             next_address_enable = 1;
-            operation_code = 7'b1100011;          
-            function3 = 3'b100;              
+            operation_code = OPERATION_CODE'('b1100011);          
+            function3 = FUNCTION_THREE'('b100);              
             signed_less = 0;
             branch_offset = ADDRESS_WIDTH'(24);
             
@@ -303,8 +303,8 @@ module Program_Counter_tb #();
             @(negedge clk)                 
             
             next_address_enable = 1;
-            operation_code = 7'b1100011;          
-            function3 = 3'b101;              
+            operation_code = OPERATION_CODE'('b1100011);          
+            function3 = FUNCTION_THREE'('b101);              
             signed_less = 0;
             branch_offset = ADDRESS_WIDTH'(8);
             
@@ -325,8 +325,8 @@ module Program_Counter_tb #();
             @(negedge clk)                 
             
             next_address_enable = 1;
-            operation_code = 7'b1100011;          
-            function3 = 3'b101;              
+            operation_code = OPERATION_CODE'('b1100011);          
+            function3 = FUNCTION_THREE'('b101);              
             signed_less = 1;
             branch_offset = ADDRESS_WIDTH'(128);
             
@@ -347,8 +347,8 @@ module Program_Counter_tb #();
             @(negedge clk)      
             
             next_address_enable = 1;
-            operation_code = 7'b1100011;          
-            function3 = 3'b110;              
+            operation_code = OPERATION_CODE'('b1100011);          
+            function3 = FUNCTION_THREE'('b110);              
             unsigned_less = 1;
             branch_offset = ADDRESS_WIDTH'(12);
             
@@ -369,8 +369,8 @@ module Program_Counter_tb #();
             @(negedge clk)                 
             
             next_address_enable = 1;
-            operation_code = 7'b1100011;          
-            function3 = 3'b110;              
+            operation_code = OPERATION_CODE'('b1100011);          
+            function3 = FUNCTION_THREE'('b110);              
             unsigned_less = 0;
             branch_offset = ADDRESS_WIDTH'(16);
             
@@ -391,8 +391,8 @@ module Program_Counter_tb #();
             @(negedge clk)      
             
             next_address_enable = 1;
-            operation_code = 7'b1100011;          
-            function3 = 3'b111;              
+            operation_code = OPERATION_CODE'('b1100011);          
+            function3 = FUNCTION_THREE'('b111);              
             unsigned_less = 0;
             branch_offset = ADDRESS_WIDTH'(16);
             
@@ -413,8 +413,8 @@ module Program_Counter_tb #();
             @(negedge clk)                 
             
             next_address_enable = 1;
-            operation_code = 7'b1100011;          
-            function3 = 3'b111;              
+            operation_code = OPERATION_CODE'('b1100011);          
+            function3 = FUNCTION_THREE'('b111);              
             unsigned_less = 1;
             branch_offset = ADDRESS_WIDTH'(40);
             

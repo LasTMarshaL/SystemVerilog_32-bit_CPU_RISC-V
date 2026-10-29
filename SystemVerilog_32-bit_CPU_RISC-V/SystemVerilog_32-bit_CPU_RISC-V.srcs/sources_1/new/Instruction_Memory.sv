@@ -4,7 +4,7 @@
 import CPU_Parameters_Config::*;
 
 
-module Instruction_Memory #()
+module Instruction_Memory
 (
     input logic [ADDRESS_WIDTH-1:0] address,
     output logic [INSTRUCTION_WIDTH-1:0] instruction

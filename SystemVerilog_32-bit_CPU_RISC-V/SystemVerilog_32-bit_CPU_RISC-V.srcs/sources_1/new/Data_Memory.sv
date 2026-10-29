@@ -4,7 +4,7 @@
 import CPU_Parameters_Config::*;
 
 
-module Data_Memory #()
+module Data_Memory
 (
     input logic clk,
     

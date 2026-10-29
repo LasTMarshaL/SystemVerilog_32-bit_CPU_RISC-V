@@ -4,11 +4,11 @@
 import CPU_Parameters_Config::*;
 
 
-module ALU #() 
+module ALU 
 (
-    input logic [6:0] operation_code,
-    input logic [2:0] function3,
-    input logic [6:0] function7,
+    input logic [OPERATION_CODE-1:0] operation_code,
+    input logic [FUNCTION_THREE-1:0] function3,
+    input logic [FUNCTION_SEVEN-1:0] function7,
     
     input logic [DATA_WIDTH-1:0] data_in_operand_a,
     input logic [DATA_WIDTH-1:0] data_in_operand_b,
@@ -43,46 +43,46 @@ module ALU #()
             case (operation_code)
                 7'b0110011: // R block
                     case (function3)
-                        3'b000: 
+                        FUNCTION_THREE'('b000): 
                             case (function7)
-                                7'b0000000: temprorary_sum = data_in_operand_a + data_in_operand_b; // ADD
-                                7'b0100000: temprorary_sum = data_in_operand_a - data_in_operand_b; // SUB
+                                FUNCTION_SEVEN'('b0000000): temprorary_sum = data_in_operand_a + data_in_operand_b; // ADD
+                                FUNCTION_SEVEN'('b0100000): temprorary_sum = data_in_operand_a - data_in_operand_b; // SUB
                                 default:    temprorary_sum = '0;
                             endcase
-                        3'b001: 
+                        FUNCTION_THREE'('b001): 
                             case (function7)
-                                7'b0000000: temprorary_sum = data_in_operand_a << data_in_operand_b[SHIFT_BITS-1:0]; // SLL
+                                FUNCTION_SEVEN'('b0000000): temprorary_sum = data_in_operand_a << data_in_operand_b[SHIFT_BITS-1:0]; // SLL
                                 default:    temprorary_sum = '0;
                             endcase
-                        3'b010: 
+                        FUNCTION_THREE'('b010): 
                             case (function7)
-                                7'b0000000: temprorary_sum = ($signed(data_in_operand_a) < $signed(data_in_operand_b) ? DATA_WIDTH'(1) : '0); // SLT
+                                FUNCTION_SEVEN'('b0000000): temprorary_sum = ($signed(data_in_operand_a) < $signed(data_in_operand_b) ? DATA_WIDTH'(1) : '0); // SLT
                                 default:    temprorary_sum = '0;
                             endcase
-                        3'b011: 
+                        FUNCTION_THREE'('b011): 
                             case (function7)
-                                7'b0000000: temprorary_sum = (data_in_operand_a < data_in_operand_b ? DATA_WIDTH'(1) : '0); // SLTU
+                                FUNCTION_SEVEN'('b0000000): temprorary_sum = (data_in_operand_a < data_in_operand_b ? DATA_WIDTH'(1) : '0); // SLTU
                                 default:    temprorary_sum = '0;
                             endcase
-                        3'b100: 
+                        FUNCTION_THREE'('b100): 
                             case (function7)
-                                7'b0000000: temprorary_sum = (data_in_operand_a ^ data_in_operand_b); // XOR
+                                FUNCTION_SEVEN'('b0000000): temprorary_sum = (data_in_operand_a ^ data_in_operand_b); // XOR
                                 default:    temprorary_sum = '0;
                             endcase
-                        3'b101: 
+                        FUNCTION_THREE'('b101): 
                             case (function7)
-                                7'b0000000: temprorary_sum = data_in_operand_a >> data_in_operand_b[4:0]; // SRL
-                                7'b0100000: temprorary_sum = $unsigned($signed(data_in_operand_a) >>> data_in_operand_b[SHIFT_BITS-1:0]); // SRA
+                                FUNCTION_SEVEN'('b0000000): temprorary_sum = data_in_operand_a >> data_in_operand_b[SHIFT_BITS-1:0]; // SRL
+                                FUNCTION_SEVEN'('b0100000): temprorary_sum = $unsigned($signed(data_in_operand_a) >>> data_in_operand_b[SHIFT_BITS-1:0]); // SRA
                                 default:    temprorary_sum = '0;
                             endcase
-                        3'b110: 
+                        FUNCTION_THREE'('b110): 
                             case (function7)
-                                7'b0000000: temprorary_sum = (data_in_operand_a | data_in_operand_b); // OR
+                                FUNCTION_SEVEN'('b0000000): temprorary_sum = (data_in_operand_a | data_in_operand_b); // OR
                                 default:    temprorary_sum = '0;
                             endcase
-                        3'b111: 
+                        FUNCTION_THREE'('b111): 
                             case (function7)
-                                7'b0000000: temprorary_sum = (data_in_operand_a & data_in_operand_b); // AND
+                                FUNCTION_SEVEN'('b0000000): temprorary_sum = (data_in_operand_a & data_in_operand_b); // AND
                                 default:    temprorary_sum = '0;
                             endcase
                         default: temprorary_sum = '0;

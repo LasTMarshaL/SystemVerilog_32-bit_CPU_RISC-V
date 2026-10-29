@@ -4,7 +4,7 @@
 import CPU_Parameters_Config::*;
 
 
-module Register_File_tb #();
+module Register_File_tb;
 
 
     logic clk;
