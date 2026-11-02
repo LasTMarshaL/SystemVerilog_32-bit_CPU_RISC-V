@@ -6,13 +6,20 @@ import CPU_Parameters_Config::*;
 
 module Instruction_Memory
 (
-    input logic [ADDRESS_WIDTH-1:0] address,
-    output logic [INSTRUCTION_WIDTH-1:0] instruction
+    input logic clk, 
+    input logic [ADDRESS_WIDTH-1:0] read_instruction_address,
+    output logic [INSTRUCTION_WIDTH-1:0] instruction,                     
+    
+    input logic read_instruction_enable,
+    input logic write_instruction_enable, 
+    input logic [ADDRESS_WIDTH-1:0] write_instruction_address,      
+    input logic [INSTRUCTION_WIDTH-1:0] write_instruction_data  
 );
 
     localparam INDEX_BITS = $clog2(MEMORY_SIZE);
     
     logic [INSTRUCTION_WIDTH-1:0] memory [0:MEMORY_SIZE-1];
+    logic [INSTRUCTION_WIDTH-1:0] current_instruction;
     
 
     initial
@@ -28,7 +35,20 @@ module Instruction_Memory
             //$readmemh("CPU_Commands.mem", memory);
         end
         
-        assign instruction = memory[address[INDEX_BITS+1:2]];
+    always_ff @(posedge clk)
+        begin
+            if (read_instruction_enable)
+                begin
+                    current_instruction <= memory[read_instruction_address[INDEX_BITS+1:2]];
+                end
+            
+            if (write_instruction_enable)
+                begin
+                    memory[write_instruction_address[INDEX_BITS+1:2]] <= write_instruction_data;
+                end
+        end
+
+    assign instruction = current_instruction;
 
 
 endmodule

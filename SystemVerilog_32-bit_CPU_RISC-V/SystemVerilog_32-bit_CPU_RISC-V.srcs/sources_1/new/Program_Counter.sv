@@ -46,11 +46,11 @@ module Program_Counter
                 if (next_address_enable)
                     begin
                         case (operation_code)
-                        FUNCTION_SEVEN'('b0010111): // U block, AUIPC
+                        OPERATION_CODE'('b0010111): // U block, AUIPC
                             begin
                                 current_instruction_address <= current_instruction_address + ADDRESS_WIDTH'(4);
                             end
-                        FUNCTION_SEVEN'('b1100011): // SB block
+                        OPERATION_CODE'('b1100011): // SB block
                             case (function3)
                                 FUNCTION_THREE'('b000): current_instruction_address <= current_instruction_address + (equal ? branch_offset : ADDRESS_WIDTH'(4)); // BEQ
                                 FUNCTION_THREE'('b001): current_instruction_address <= current_instruction_address + (!equal ? branch_offset : ADDRESS_WIDTH'(4)); // BNE
@@ -60,7 +60,7 @@ module Program_Counter
                                 FUNCTION_THREE'('b111): current_instruction_address <= current_instruction_address + (!unsigned_less? branch_offset : ADDRESS_WIDTH'(4)); // BGEU
                                 default: current_instruction_address <= current_instruction_address + ADDRESS_WIDTH'(4);
                             endcase
-                        FUNCTION_SEVEN'('b1100111): // I block
+                        OPERATION_CODE'('b1100111): // I block
                             case (function3)
                                 FUNCTION_THREE'('b000): // JALR
                                     begin
@@ -68,7 +68,7 @@ module Program_Counter
                                     end
                                 default: current_instruction_address <= current_instruction_address + ADDRESS_WIDTH'(4);
                             endcase
-                        FUNCTION_SEVEN'('b1101111): // UJ block, JAL
+                        OPERATION_CODE'('b1101111): // UJ block, JAL
                             begin
                                 current_instruction_address <= current_instruction_address + jump_jal_offset;
                             end
