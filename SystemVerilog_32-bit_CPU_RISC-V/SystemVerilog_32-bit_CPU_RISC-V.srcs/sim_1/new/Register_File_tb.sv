@@ -64,6 +64,7 @@ module Register_File_tb;
             read_register_select_1 = '0;
             
             @(negedge clk)
+            @(negedge clk)
             
             if (read_register_data_1 == '0)
                 begin
@@ -89,6 +90,7 @@ module Register_File_tb;
             read_register_select_2 = REGISTER_SELECTION_WIDTH'(23);
             
             @(negedge clk)
+            @(negedge clk)
             
             if (read_register_data_2 == write_register_data)
                 begin
@@ -113,6 +115,7 @@ module Register_File_tb;
             read_register_enable = 1;
             read_register_select_2 = REGISTER_SELECTION_WIDTH'(23);
             
+            @(negedge clk)
             @(negedge clk)
             
             if (read_register_data_2 == -DATA_WIDTH'('sd38))
@@ -147,11 +150,13 @@ module Register_File_tb;
             write_register_data = DATA_WIDTH'('sd134);
             
             @(negedge clk)
+            @(negedge clk)
             
             write_register_enable = 0;
             read_register_enable = 1;
             read_register_select_2 = REGISTER_SELECTION_WIDTH'(13);
             
+            @(negedge clk)
             @(negedge clk)
             
             if (read_register_data_2 == DATA_WIDTH'('sd134) && read_register_data_1 == -DATA_WIDTH'('sd535))

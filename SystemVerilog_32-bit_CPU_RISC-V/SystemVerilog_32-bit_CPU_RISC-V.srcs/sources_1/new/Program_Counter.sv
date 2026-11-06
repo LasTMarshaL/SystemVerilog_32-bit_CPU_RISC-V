@@ -14,6 +14,12 @@ module Program_Counter
     
     input logic next_address_enable,
     
+    input logic ebreak,
+    input logic ecall,
+    input logic mret,
+    input logic [ADDRESS_WIDTH-1:0] mtvec_address,
+    input logic [ADDRESS_WIDTH-1:0] system_return_address,
+    
     input logic [ADDRESS_WIDTH-1:0] auipc_offset,
     output logic [ADDRESS_WIDTH-1:0] auipc_offset_address,
     input logic [ADDRESS_WIDTH-1:0] branch_offset,
@@ -31,9 +37,6 @@ module Program_Counter
     
     logic [ADDRESS_WIDTH-1:0] current_instruction_address;
     
-    assign return_instruction_address = current_instruction_address + ADDRESS_WIDTH'(4);
-    assign auipc_offset_address = current_instruction_address + auipc_offset;
-     
     
     always_ff @(posedge clk or posedge reset)
         begin
@@ -41,44 +44,63 @@ module Program_Counter
                 begin
                     current_instruction_address <= RESET_ADDRESS;
                 end
+            else if (ebreak)
+                begin
+                    current_instruction_address <= current_instruction_address;
+                end
             else
                 begin
-                if (next_address_enable)
-                    begin
-                        case (operation_code)
-                        OPERATION_CODE'('b0010111): // U block, AUIPC
-                            begin
-                                current_instruction_address <= current_instruction_address + ADDRESS_WIDTH'(4);
-                            end
-                        OPERATION_CODE'('b1100011): // SB block
-                            case (function3)
-                                FUNCTION_THREE'('b000): current_instruction_address <= current_instruction_address + (equal ? branch_offset : ADDRESS_WIDTH'(4)); // BEQ
-                                FUNCTION_THREE'('b001): current_instruction_address <= current_instruction_address + (!equal ? branch_offset : ADDRESS_WIDTH'(4)); // BNE
-                                FUNCTION_THREE'('b100): current_instruction_address <= current_instruction_address + (signed_less ? branch_offset : ADDRESS_WIDTH'(4)); // BLT
-                                FUNCTION_THREE'('b101): current_instruction_address <= current_instruction_address + (!signed_less ? branch_offset : ADDRESS_WIDTH'(4)); // BGE
-                                FUNCTION_THREE'('b110): current_instruction_address <= current_instruction_address + (unsigned_less ? branch_offset : ADDRESS_WIDTH'(4)); // BLTU
-                                FUNCTION_THREE'('b111): current_instruction_address <= current_instruction_address + (!unsigned_less? branch_offset : ADDRESS_WIDTH'(4)); // BGEU
-                                default: current_instruction_address <= current_instruction_address + ADDRESS_WIDTH'(4);
-                            endcase
-                        OPERATION_CODE'('b1100111): // I block
-                            case (function3)
-                                FUNCTION_THREE'('b000): // JALR
-                                    begin
-                                        current_instruction_address <= jump_jalr_target;
-                                    end
-                                default: current_instruction_address <= current_instruction_address + ADDRESS_WIDTH'(4);
-                            endcase
-                        OPERATION_CODE'('b1101111): // UJ block, JAL
-                            begin
-                                current_instruction_address <= current_instruction_address + jump_jal_offset;
-                            end
-                        default: current_instruction_address <= current_instruction_address + ADDRESS_WIDTH'(4);
-                    endcase
-                    end  
+                    if (next_address_enable)
+                        begin
+                            if (ecall)
+                                begin
+                                    current_instruction_address <= mtvec_address;
+                                end
+                            else if (mret)
+                                begin
+                                    current_instruction_address <= system_return_address;
+                                end
+                            else
+                                begin
+                                    case (operation_code)
+                                        OPERATION_CODE'('b0010111): // U block, AUIPC
+                                            begin
+                                                current_instruction_address <= current_instruction_address + ADDRESS_WIDTH'(4);
+                                            end
+                                        OPERATION_CODE'('b1100011): // SB block
+                                            case (function3)
+                                                FUNCTION_THREE'('b000): current_instruction_address <= current_instruction_address + (equal ? branch_offset : ADDRESS_WIDTH'(4)); // BEQ
+                                                FUNCTION_THREE'('b001): current_instruction_address <= current_instruction_address + (!equal ? branch_offset : ADDRESS_WIDTH'(4)); // BNE
+                                                FUNCTION_THREE'('b100): current_instruction_address <= current_instruction_address + (signed_less ? branch_offset : ADDRESS_WIDTH'(4)); // BLT
+                                                FUNCTION_THREE'('b101): current_instruction_address <= current_instruction_address + (!signed_less ? branch_offset : ADDRESS_WIDTH'(4)); // BGE
+                                                FUNCTION_THREE'('b110): current_instruction_address <= current_instruction_address + (unsigned_less ? branch_offset : ADDRESS_WIDTH'(4)); // BLTU
+                                                FUNCTION_THREE'('b111): current_instruction_address <= current_instruction_address + (!unsigned_less? branch_offset : ADDRESS_WIDTH'(4)); // BGEU
+                                            default: current_instruction_address <= current_instruction_address + ADDRESS_WIDTH'(4);
+                                        endcase
+                                        OPERATION_CODE'('b1100111): // I block
+                                            begin
+                                                case (function3)
+                                                    FUNCTION_THREE'('b000): // JALR
+                                                        begin
+                                                            current_instruction_address <= jump_jalr_target;
+                                                        end
+                                                    default: current_instruction_address <= current_instruction_address + ADDRESS_WIDTH'(4);
+                                                endcase
+                                            end
+                                        OPERATION_CODE'('b1101111): // UJ block, JAL
+                                            begin
+                                                current_instruction_address <= current_instruction_address + jump_jal_offset;
+                                            end
+                                       default: current_instruction_address <= current_instruction_address + ADDRESS_WIDTH'(4);
+                                    endcase
+                                end
+                        
+                        end  
                 end
         end
         
-        
+    assign return_instruction_address = current_instruction_address + ADDRESS_WIDTH'(4);
+    assign auipc_offset_address = current_instruction_address + auipc_offset;
     assign instruction_address = current_instruction_address;
     
     

@@ -5,6 +5,7 @@ package CPU_Parameters_Config;
     
     localparam ADDRESS_WIDTH = 32;
     localparam [ADDRESS_WIDTH-1:0] RESET_ADDRESS = '0;
+    localparam FORCE_SYSTEM_TRAP_WIDTH = 2;
     
     localparam DATA_WIDTH = 32;
     localparam INSTRUCTION_WIDTH = 32;
@@ -17,6 +18,16 @@ package CPU_Parameters_Config;
     
     localparam OPERATION_DURATION = 200;
     localparam PROPAGATION_DELAY = 5;
+    
+    localparam FENCE_FLAG_WIDTH = 1;
+    localparam PI_POSITION = 27;
+    localparam PO_POSITION = 26;
+    localparam PR_POSITION = 25;
+    localparam PW_POSITION = 24;
+    localparam SI_POSITION = 23;
+    localparam SO_POSITION = 22;
+    localparam SR_POSITION = 21;
+    localparam SW_POSITION = 20;
     
     localparam I_IMMEDIATE_WIDTH = 12;
 
