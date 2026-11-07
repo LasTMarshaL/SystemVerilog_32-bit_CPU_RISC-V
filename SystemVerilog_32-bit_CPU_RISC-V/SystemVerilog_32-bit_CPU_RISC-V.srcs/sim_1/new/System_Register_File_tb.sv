@@ -75,11 +75,11 @@ module System_Register_File_tb();
             
             if (read_system_register_data == write_system_register_data)
                 begin
-                    $display("SUCCESS: Number %d was written in system register %d.", write_system_register_data, write_system_register_select);
+                    $display("SUCCESS MSTATUS: Number %d was written in system register %d.", write_system_register_data, write_system_register_select);
                 end
             else
                 begin
-                    $display("FAIL: Number %d was not written in system register %d.", write_system_register_data, write_system_register_select);
+                    $display("FAIL MSTATUS: Number %d was not written in system register %d.", write_system_register_data, write_system_register_select);
                 end
             
             #OPERATION_DURATION
@@ -101,11 +101,11 @@ module System_Register_File_tb();
             
             if (read_system_register_data == write_system_register_data)
                 begin
-                    $display("SUCCESS: Number %d was written in system register %d.", write_system_register_data, write_system_register_select);
+                    $display("SUCCESS MIE: Number %d was written in system register %d.", write_system_register_data, write_system_register_select);
                 end
             else
                 begin
-                    $display("FAIL: Number %d was not written in system register %d.", write_system_register_data, write_system_register_select);
+                    $display("FAIL MIE: Number %d was not written in system register %d.", write_system_register_data, write_system_register_select);
                 end
                 
             #OPERATION_DURATION
@@ -127,11 +127,11 @@ module System_Register_File_tb();
             
             if (read_system_register_data == write_system_register_data)
                 begin
-                    $display("SUCCESS: Number %d was written in system register %d.", write_system_register_data, write_system_register_select);
+                    $display("SUCCESS MTVEC: Number %d was written in system register %d.", write_system_register_data, write_system_register_select);
                 end
             else
                 begin
-                    $display("FAIL: Number %d was not written in system register %d.", write_system_register_data, write_system_register_select);
+                    $display("FAIL MTVEC: Number %d was not written in system register %d.", write_system_register_data, write_system_register_select);
                 end
                 
             #OPERATION_DURATION
@@ -153,11 +153,11 @@ module System_Register_File_tb();
             
             if (read_system_register_data == write_system_register_data)
                 begin
-                    $display("SUCCESS: Number %d was written in system register %d.", write_system_register_data, write_system_register_select);
+                    $display("SUCCESS MSCRATCH: Number %d was written in system register %d.", write_system_register_data, write_system_register_select);
                 end
             else
                 begin
-                    $display("FAIL: Number %d was not written in system register %d.", write_system_register_data, write_system_register_select);
+                    $display("FAIL MSCRATCH: Number %d was not written in system register %d.", write_system_register_data, write_system_register_select);
                 end
                 
             #OPERATION_DURATION
@@ -179,11 +179,11 @@ module System_Register_File_tb();
             
             if (read_system_register_data == write_system_register_data)
                 begin
-                    $display("SUCCESS: Number %d was written in system register %d.", write_system_register_data, write_system_register_select);
+                    $display("SUCCESS MEPC: Number %d was written in system register %d.", write_system_register_data, write_system_register_select);
                 end
             else
                 begin
-                    $display("FAIL: Number %d was not written in system register %d.", write_system_register_data, write_system_register_select);
+                    $display("FAIL MEPC: Number %d was not written in system register %d.", write_system_register_data, write_system_register_select);
                 end
                 
             #OPERATION_DURATION
@@ -205,11 +205,11 @@ module System_Register_File_tb();
             
             if (read_system_register_data == write_system_register_data)
                 begin
-                    $display("SUCCESS: Number %d was written in system register %d.", write_system_register_data, write_system_register_select);
+                    $display("SUCCESS MCAUSE: Number %d was written in system register %d.", write_system_register_data, write_system_register_select);
                 end
             else
                 begin
-                    $display("FAIL: Number %d was not written in system register %d.", write_system_register_data, write_system_register_select);
+                    $display("FAIL MCAUSE: Number %d was not written in system register %d.", write_system_register_data, write_system_register_select);
                 end
                 
             #OPERATION_DURATION
@@ -232,11 +232,11 @@ module System_Register_File_tb();
             
             if (read_system_register_data == write_system_register_data)
                 begin
-                    $display("SUCCESS: Number %d was written in system register %d.", write_system_register_data, write_system_register_select);
+                    $display("SUCCESS MTVAL: Number %d was written in system register %d.", write_system_register_data, write_system_register_select);
                 end
             else
                 begin
-                    $display("FAIL: Number %d was not written in system register %d.", write_system_register_data, write_system_register_select);
+                    $display("FAIL MTVAL: Number %d was not written in system register %d.", write_system_register_data, write_system_register_select);
                 end
                 
             #OPERATION_DURATION
@@ -277,11 +277,11 @@ module System_Register_File_tb();
             
             if (system_register_exception == DATA_WIDTH'(2))
                 begin
-                    $display("SUCCESS: non-available system register during writing was received.", system_register_exception);
+                    $display("SUCCESS 4 ERROR: non-available system register during writing was received.", system_register_exception);
                 end
             else
                 begin
-                    $display("FAIL: non-available system register during writing was not received.", system_register_exception);
+                    $display("FAIL 4 ERROR: non-available system register during writing was not received.", system_register_exception);
                 end
                         
             write_system_register_enable = 0;
@@ -293,11 +293,11 @@ module System_Register_File_tb();
             
             if (system_register_exception == DATA_WIDTH'(2))
                 begin
-                    $display("SUCCESS: non-available system register during reading was received.", system_register_exception);
+                    $display("SUCCESS 4 ERROR: non-available system register during reading was received.", system_register_exception);
                 end
             else
                 begin
-                    $display("FAIL: non-available system register during reading was not received.", system_register_exception);
+                    $display("FAIL 4 ERROR: non-available system register during reading was not received.", system_register_exception);
                 end       
             
             #OPERATION_DURATION

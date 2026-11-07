@@ -12,7 +12,7 @@ module Control_Unit
     input logic [INSTRUCTION_WIDTH-1:0] instruction,
     
     output logic alu_source,
-    output logic memory_byte_mask_calculation_enable,
+    output logic memory_byte_mask,
     
     output logic read_instruction_enable,
     output logic write_instruction_enable,
@@ -29,6 +29,9 @@ module Control_Unit
 
   
     output logic read_memory_enable,
+    output logic store_byte,
+    output logic store_half_word,
+    output logic store_word,
     output logic [DATA_WIDTH/BYTE_SIZE-1:0] write_memory_byte_enable,   
     
     input logic memory_read_finished,
@@ -88,7 +91,10 @@ module Control_Unit
             read_system_register_select = '0;
             write_system_register_select = '0;
             read_memory_enable = 0;
-            memory_byte_mask_calculation_enable = 0;
+            store_byte = 0;
+            store_half_word = 0;
+            store_word = 0;
+            write_memory_byte_enable = '0; 
             alu_source = 0;
             fence_stall = 0;
             fencei_flush = 0;
@@ -136,6 +142,15 @@ module Control_Unit
                                         alu_source = 1;
                                         read_register_enable = 1;
                                         read_memory_enable = 1;
+                                       /* 
+                                        case(instruction[INSTRUCTION_WIDTH-I_IMMEDIATE_WIDTH-REGISTER_SELECTION_WIDTH-1:INSTRUCTION_WIDTH-I_IMMEDIATE_WIDTH-REGISTER_SELECTION_WIDTH-FUNCTION_THREE])
+                                                FUNCTION_THREE'('b000): // LB
+                                                FUNCTION_THREE'('b001): // LH
+                                                FUNCTION_THREE'('b010): // LW
+                                                FUNCTION_THREE'('b100): // LBU
+                                                FUNCTION_THREE'('b101): // LHU
+                                        endcase
+                                        */
                                         next_state = MEMORY_DELAY;
                                     end
                                 else 
@@ -326,7 +341,25 @@ module Control_Unit
                                     begin
                                         alu_source = 1;
                                         read_register_enable = 1;
-                                        memory_byte_mask_calculation_enable = 1;
+                                        
+                                        case(instruction[INSTRUCTION_WIDTH-I_IMMEDIATE_WIDTH-REGISTER_SELECTION_WIDTH-1:INSTRUCTION_WIDTH-I_IMMEDIATE_WIDTH-REGISTER_SELECTION_WIDTH-FUNCTION_THREE])
+                                            FUNCTION_THREE'('b000): // SB
+                                                begin
+                                                    store_byte = 1;
+                                                    write_memory_byte_enable = 1;
+                                                end
+                                            FUNCTION_THREE'('b001): // SH
+                                                begin
+                                                    store_byte = 1;
+                                                    write_memory_byte_enable = 1;
+                                                end
+                                            FUNCTION_THREE'('b010): //SW
+                                                begin
+                                                    store_byte = 1;
+                                                    write_memory_byte_enable = 1;
+                                                end
+                                             default: ;
+                                        endcase
                                         
                                         if (memory_write_finished)
                                             begin

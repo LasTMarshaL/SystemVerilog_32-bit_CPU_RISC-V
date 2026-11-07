@@ -10,7 +10,9 @@ module Data_Memory
     input logic reset,
     
     input logic read_memory_enable,
-    input logic [DATA_WIDTH/BYTE_SIZE-1:0] write_memory_byte_enable,
+    input logic store_byte,
+    input logic store_half_word,
+    input logic store_word,
     
     input logic [ADDRESS_WIDTH-1:0] memory_address,
     
@@ -18,7 +20,9 @@ module Data_Memory
     output logic [DATA_WIDTH-1:0] read_memory_data,
     
     output logic memory_read_finished,
-    output logic memory_write_finished
+    output logic memory_write_finished,
+    
+    output logic [DATA_WIDTH-1:0] memory_exception
 );
     
     
@@ -32,12 +36,9 @@ module Data_Memory
     
     localparam INDEX_BITS = $clog2(MEMORY_SIZE);
     
-    logic [INDEX_BITS-1:0] word_address;
-    logic [INDEX_BITS-1:0] register_word_address;
-    
-    assign word_address = memory_address[INDEX_BITS+1:2];
-    
+    logic [ADDRESS_WIDTH-1:0] register_memory_address;
     logic [DATA_WIDTH-1:0] memory [0:MEMORY_SIZE-1];
+
     
     initial
         begin
@@ -54,43 +55,88 @@ module Data_Memory
                 begin
                     memory_state <= IDLE;
                     read_memory_data <= '0;
-                    register_word_address <= '0;
+                    register_memory_address <= '0;
                     memory_read_finished  <= 0;
                     memory_write_finished <= 0;
+                    memory_exception <= 0;
                 end
             else
                 begin
                     memory_read_finished <= 0;
                     memory_write_finished <= 0;
-                    case (memory_state)
-                        IDLE:
-                            begin
-                                if (read_memory_enable)
+                    
+                    if (memory_exception == '0)
+                        begin
+                            case (memory_state)
+                                IDLE:
                                     begin
-                                        register_word_address <= word_address;
-                                        memory_state <= EXECUTE;
-                                    end
-                                else if (|write_memory_byte_enable)
-                                    begin
-                                        for (int i = 0; i < BYTES_NUMBER; i += 1)
+                                        if (read_memory_enable)
                                             begin
-                                                if (write_memory_byte_enable[i])
+                                                if ($unsigned(memory_address) < $unsigned(MEMORY_SIZE))
                                                     begin
-                                                        memory[word_address][(i*BYTE_SIZE) +: BYTE_SIZE] <= write_memory_data[(i*BYTE_SIZE) +: BYTE_SIZE];
+                                                        register_memory_address <= memory_address;
+                                                        memory_state <= EXECUTE;
                                                     end
-                                             end
-                                        memory_write_finished <= 1;
+                                                else
+                                                    begin
+                                                        memory_exception <= DATA_WIDTH'(5);
+                                                    end
+                                            end
+                                        else if (store_byte || store_half_word || store_word)
+                                            begin
+                                                if (store_byte || (store_half_word && (memory_address[0] == '0)) || (store_word && (memory_address[BYTES_QUATER_NUMBER:0] == '0)))
+                                                    begin
+                                                        if ($unsigned(memory_address) < $unsigned(MEMORY_SIZE))
+                                                            begin
+                                                                automatic logic [BYTES_NUMBER-1:0] mask = '0;
+                                                                if (store_byte)
+                                                                    begin
+                                                                        case (memory_address[BYTES_NUMBER-1:0])
+                                                                            BYTES_HALF_NUMBER'('b00): mask = BYTES_NUMBER'('b0001);
+                                                                            BYTES_HALF_NUMBER'('b01): mask = BYTES_NUMBER'('b0010);
+                                                                            BYTES_HALF_NUMBER'('b10): mask = BYTES_NUMBER'('b0100);
+                                                                            BYTES_HALF_NUMBER'('b11): mask = BYTES_NUMBER'('b1000);
+                                                                        endcase
+                                                                    end
+                                                                else if (store_half_word)
+                                                                    begin
+                                                                        mask = (memory_address[BYTES_QUATER_NUMBER] == 0) ? BYTES_NUMBER'('b0011) : BYTES_NUMBER'('b1100);
+                                                                    end 
+                                                                else if (store_word)
+                                                                    begin
+                                                                        mask = BYTES_NUMBER'('b1111);
+                                                                    end
+
+                                                                for (int i = 0; i < BYTES_NUMBER; i += 1)
+                                                                    begin
+                                                                        if (mask[i])
+                                                                            begin
+                                                                                memory[memory_address][(i*BYTE_SIZE) +: BYTE_SIZE] <= write_memory_data[(i*BYTE_SIZE) +: BYTE_SIZE];
+                                                                            end
+                                                                    end
+                                                                memory_write_finished <= 1;
+                                                                memory_state <= IDLE;
+                                                            end
+                                                        else
+                                                            begin
+                                                                memory_exception <= DATA_WIDTH'(7);
+                                                            end
+                                                    end
+                                                else
+                                                    begin
+                                                        memory_exception <= DATA_WIDTH'(6);
+                                                    end
+                                            end
+                                    end
+                                EXECUTE:
+                                    begin
+                                        read_memory_data <= memory[register_memory_address];
+                                        memory_read_finished  <= 1;
                                         memory_state <= IDLE;
                                     end
-                            end
-                       EXECUTE:
-                            begin
-                                read_memory_data <= memory[register_word_address];
-                                memory_read_finished  <= 1;
-                                memory_state <= IDLE;
-                            end
-                        default: ;
-                    endcase
+                                default: ;
+                            endcase
+                        end
                 end    
         end
 

@@ -11,7 +11,9 @@ package CPU_Parameters_Config;
     localparam INSTRUCTION_WIDTH = 32;
     
     localparam BYTE_SIZE = 8;
-    localparam BYTES_NUMBER = DATA_WIDTH / BYTE_SIZE ;
+    localparam BYTES_NUMBER = 4;
+    localparam BYTES_HALF_NUMBER = 2;
+    localparam BYTES_QUATER_NUMBER = 1;
     
     localparam MEMORY_SIZE = 16384;
     localparam REGISTER_SELECTION_WIDTH = 5;
