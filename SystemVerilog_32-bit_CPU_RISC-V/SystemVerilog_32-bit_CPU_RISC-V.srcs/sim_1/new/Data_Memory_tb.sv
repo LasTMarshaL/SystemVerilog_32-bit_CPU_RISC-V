@@ -85,6 +85,9 @@ module Data_Memory_tb;
             read_memory_enable = 1;
             
             @(negedge clk)
+            
+            read_memory_enable = 0;
+            
             @(negedge clk)
             
             if (memory_read_finished == 1)
@@ -104,10 +107,6 @@ module Data_Memory_tb;
                 begin
                     $display("FAIL SB: Expected data (%d) was not written to the address word cell %d.", write_memory_data, memory_address[ADDRESS_WIDTH-2:2]);
                 end
-               
-            @(negedge clk)
-            
-            read_memory_enable = 0;
                 
             #OPERATION_DURATION
             @(negedge clk)
@@ -131,6 +130,9 @@ module Data_Memory_tb;
             read_memory_enable = 1;
             
             @(negedge clk)
+            
+            read_memory_enable = 0;
+            
             @(negedge clk)
             
             if (memory_read_finished == 1)
@@ -150,10 +152,6 @@ module Data_Memory_tb;
                 begin
                     $display("FAIL SB: Expected data (%d) was not written to the address word cell %d.", write_memory_data, memory_address[ADDRESS_WIDTH-2:2]);
                 end
-               
-            @(negedge clk)
-            
-            read_memory_enable = 0;
             
             #OPERATION_DURATION
             @(negedge clk)
@@ -177,6 +175,9 @@ module Data_Memory_tb;
             read_memory_enable = 1;
             
             @(negedge clk)
+            
+            read_memory_enable = 0;
+            
             @(negedge clk)
             
             if (memory_read_finished == 1)
@@ -196,10 +197,6 @@ module Data_Memory_tb;
                 begin
                     $display("FAIL SB: Expected data (%d) was not written to the address word cell %d.", write_memory_data, memory_address[ADDRESS_WIDTH-2:2]);
                 end
-               
-            @(negedge clk)
-            
-            read_memory_enable = 0;
             
             #OPERATION_DURATION
             @(negedge clk)
@@ -223,6 +220,9 @@ module Data_Memory_tb;
             read_memory_enable = 1;
             
             @(negedge clk)
+            
+            read_memory_enable = 0;
+            
             @(negedge clk)
             
             if (memory_read_finished == 1)
@@ -242,10 +242,6 @@ module Data_Memory_tb;
                 begin
                     $display("FAIL SB: Expected data (%d) was not written to the address word cell %d.", write_memory_data, memory_address[ADDRESS_WIDTH-2:2]);
                 end
-               
-            @(negedge clk)
-            
-            read_memory_enable = 0;
             
             #OPERATION_DURATION
             @(negedge clk)
@@ -269,6 +265,9 @@ module Data_Memory_tb;
             read_memory_enable = 1;
             
             @(negedge clk)
+            
+            read_memory_enable = 0;
+            
             @(negedge clk)
             
             if (memory_read_finished == 1)
@@ -288,10 +287,6 @@ module Data_Memory_tb;
                 begin
                     $display("FAIL SH: Expected data (%d) was not written to the address word cell %d.", write_memory_data, memory_address[ADDRESS_WIDTH-2:2]);
                 end
-               
-            @(negedge clk)
-            
-            read_memory_enable = 0;
             
             #OPERATION_DURATION
             @(negedge clk)
@@ -315,6 +310,9 @@ module Data_Memory_tb;
             read_memory_enable = 1;
             
             @(negedge clk)
+            
+            read_memory_enable = 0;
+            
             @(negedge clk)
             
             if (memory_read_finished == 1)
@@ -334,10 +332,6 @@ module Data_Memory_tb;
                 begin
                     $display("FAIL SH: Expected data (%d) was not written to the address word cell %d.", write_memory_data, memory_address[ADDRESS_WIDTH-2:2]);
                 end
-               
-            @(negedge clk)
-            
-            read_memory_enable = 0;
             
             #OPERATION_DURATION
             @(negedge clk)
@@ -361,6 +355,9 @@ module Data_Memory_tb;
             read_memory_enable = 1;
             
             @(negedge clk)
+            
+            read_memory_enable = 0;
+            
             @(negedge clk)
             
             if (memory_read_finished == 1)
@@ -380,10 +377,6 @@ module Data_Memory_tb;
                 begin
                     $display("FAIL SW: Expected data (%d) was not written to the address word cell %d.", write_memory_data, memory_address[ADDRESS_WIDTH-2:2]);
                 end
-               
-            @(negedge clk)
-            
-            read_memory_enable = 0;
             
             #OPERATION_DURATION
             @(negedge clk);
@@ -392,7 +385,6 @@ module Data_Memory_tb;
             @(negedge clk);      
             reset = 0;           
             
-            @(negedge clk);
             @(negedge clk);
             
             store_half_word = 1;
@@ -426,7 +418,6 @@ module Data_Memory_tb;
             write_memory_data = DATA_WIDTH'('sd799) << BYTE_SIZE * 0;
             
             @(negedge clk)
-            @(negedge clk);
             
             if (memory_exception == DATA_WIDTH'(7))
                 begin
@@ -452,6 +443,9 @@ module Data_Memory_tb;
             read_memory_enable = 1;
             
             @(negedge clk)
+            
+            read_memory_enable = 0;
+            
             @(negedge clk)
             
             if (memory_exception == DATA_WIDTH'(5))
@@ -462,10 +456,6 @@ module Data_Memory_tb;
                 begin
                     $display("FAIL 5 ERROR: exception was not handled correctly %d.", memory_exception);
                 end
-               
-            @(negedge clk)
-            
-            read_memory_enable = 0;
             
             #OPERATION_DURATION
             $finish;

@@ -15,15 +15,22 @@ module Instruction_Memory
     input logic fencei_flush,
     
     input logic read_instruction_enable,
-    input logic write_instruction_enable, 
-    input logic [ADDRESS_WIDTH-1:0] write_instruction_address,      
-    input logic [INSTRUCTION_WIDTH-1:0] write_instruction_data  
+    
+    output logic instruction_read_finished,
+    
+    output logic [DATA_WIDTH-1:0] instruction_exception
 );
-
-    localparam INDEX_BITS = $clog2(MEMORY_SIZE);
+   
+    typedef enum logic
+    {
+        IDLE,
+        EXECUTE
+    } memory_state_typedef;
+    
+    memory_state_typedef memory_state;
     
     logic [INSTRUCTION_WIDTH-1:0] memory [0:MEMORY_SIZE-1];
-    logic [INSTRUCTION_WIDTH-1:0] current_instruction;
+    logic [ADDRESS_WIDTH-1:0] register_read_instruction_address;
 
     initial
         begin
@@ -38,30 +45,63 @@ module Instruction_Memory
             //$readmemh("CPU_Commands.mem", memory);
         end
         
-    always_ff @(posedge clk)
+    always_ff @(posedge clk or posedge reset)
         begin
             if (reset)
                 begin
-                    current_instruction <= '0;
-                end
-            else if (fencei_flush)
-                begin
-                    current_instruction <= INSTRUCTION_WIDTH'('h00000013);
+                    instruction <= '0;
+                    instruction_read_finished <= 0;
+                    instruction_exception <= '1;
+                    memory_state <= IDLE;
                 end
             else
                 begin
-                    if (read_instruction_enable)
+                    if (instruction_exception == '1)
                         begin
-                            current_instruction <= memory[read_instruction_address[INDEX_BITS+1:2]];
-                        end
-                    else if (write_instruction_enable)
-                        begin
-                            memory[write_instruction_address[INDEX_BITS+1:2]] <= write_instruction_data;
+                            if (fencei_flush)
+                                begin
+                                    instruction <= INSTRUCTION_WIDTH'('h00000013);
+                                    instruction_read_finished <= 1;
+                                end
+                            else
+                                begin
+                                    instruction_read_finished <= 0;
+                                    
+                                    case (memory_state)
+                                        IDLE:
+                                            begin
+                                                if (read_instruction_address[BYTES_QUATER_NUMBER:0] == '0)
+                                                    begin
+                                                        if (read_instruction_enable)
+                                                            begin
+                                                                if ($unsigned(read_instruction_address) < $unsigned(MEMORY_SIZE * 4))
+                                                                    begin
+                                                                        register_read_instruction_address <= read_instruction_address >> 2;
+                                                                        memory_state <= EXECUTE;
+                                                                    end 
+                                                                else
+                                                                    begin
+                                                                        instruction_exception <= DATA_WIDTH'(1);
+                                                                    end
+                                                            end
+                                                    end
+                                                else
+                                                    begin
+                                                         instruction_exception <= DATA_WIDTH'(0);
+                                                    end
+                                            end
+                                        EXECUTE:
+                                            begin
+                                                instruction <= memory[register_read_instruction_address];
+                                                instruction_read_finished  <= 1;
+                                                memory_state <= IDLE;
+                                            end
+                                        default: memory_state <= IDLE;
+                                    endcase
+                                 end
                         end
                 end
         end
-
-    assign instruction = current_instruction;
-
-
+        
+        
 endmodule

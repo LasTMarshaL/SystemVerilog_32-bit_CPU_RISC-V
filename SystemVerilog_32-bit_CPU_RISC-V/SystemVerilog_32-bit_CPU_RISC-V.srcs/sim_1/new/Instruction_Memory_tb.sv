@@ -16,10 +16,11 @@ module Instruction_Memory_tb;
     logic fencei_flush;
     
     logic read_instruction_enable;
-    logic write_instruction_enable;
-    logic [ADDRESS_WIDTH-1:0] write_instruction_address;
-    logic [INSTRUCTION_WIDTH-1:0] write_instruction_data;
     
+    logic instruction_read_finished;
+    
+    logic [DATA_WIDTH-1:0] instruction_exception;
+
     Instruction_Memory uut (
         .clk(clk),
         .reset(reset),
@@ -27,9 +28,8 @@ module Instruction_Memory_tb;
         .instruction(instruction),
         .fencei_flush(fencei_flush),
         .read_instruction_enable(read_instruction_enable),
-        .write_instruction_enable(write_instruction_enable),
-        .write_instruction_address(write_instruction_address),
-        .write_instruction_data(write_instruction_data)
+        .instruction_read_finished(instruction_read_finished),
+        .instruction_exception(instruction_exception)
     );
     
     always
@@ -44,9 +44,7 @@ module Instruction_Memory_tb;
             fencei_flush = 0;
             read_instruction_address = '0;
             read_instruction_enable = 0;
-            write_instruction_enable = 0;
-            write_instruction_address = '0;
-            write_instruction_data = '0;
+            instruction_read_finished = 0;
             
             #OPERATION_DURATION
             reset = 0;
@@ -71,6 +69,11 @@ module Instruction_Memory_tb;
             @(negedge clk)
             
             read_instruction_enable = 1;
+            read_instruction_address = DATA_WIDTH'(0);
+            
+            @(negedge clk)
+            
+            read_instruction_enable = 0;
             read_instruction_address = '0;
             
             @(negedge clk)
@@ -86,14 +89,16 @@ module Instruction_Memory_tb;
                 
             @(negedge clk)
             
-            read_instruction_enable = 0;
-            read_instruction_address = '0;
-                
             #OPERATION_DURATION
             @(negedge clk)
             
             read_instruction_enable = 1;
             read_instruction_address = ADDRESS_WIDTH'(4);
+            
+            @(negedge clk)
+            
+            read_instruction_enable = 0;
+            read_instruction_address = '0;
             
             @(negedge clk)
 
@@ -108,14 +113,16 @@ module Instruction_Memory_tb;
                 
             @(negedge clk)
             
-            read_instruction_enable = 0;
-            read_instruction_address = '0;
-            
             #OPERATION_DURATION
             @(negedge clk)
             
             read_instruction_enable = 1;
             read_instruction_address = ADDRESS_WIDTH'(8);
+            
+            @(negedge clk)
+            
+            read_instruction_enable = 0;
+            read_instruction_address = '0;
             
             @(negedge clk)
 
@@ -130,37 +137,63 @@ module Instruction_Memory_tb;
             
             @(negedge clk)
             
+            #OPERATION_DURATION
+            @(negedge clk);
+            reset = 1;           
+            
+            @(negedge clk);      
+            reset = 0;           
+            
+            @(negedge clk);
+            
+            read_instruction_enable = 1;
+            read_instruction_address = ADDRESS_WIDTH'(444444441);
+            
+            @(negedge clk)
+            
             read_instruction_enable = 0;
             read_instruction_address = '0;
-                
-            #OPERATION_DURATION
-            @(negedge clk)
-            
-            write_instruction_address = ADDRESS_WIDTH'(24);
-            write_instruction_enable = 1;
-            write_instruction_data = DATA_WIDTH'('h45ace120);
-            
-            @(negedge clk)
-            
-            write_instruction_enable = 0;
-            read_instruction_enable = 1;
             
             @(negedge clk)
 
-           if (write_instruction_data == INSTRUCTION_WIDTH'('h45ace120))
+            if (instruction_exception ==  DATA_WIDTH'(0))
                 begin
-                    $display("SUCCESS: Expected data (%d) were written in the address cell %d.", write_instruction_data, write_instruction_address);
+                    $display("SUCCESS 0 ERROR: exception was handled correctly %d.", instruction_exception);
                 end
-           else
+            else
                 begin
-                    $display("FAIL: Expected data (%d) were not written located in the address cell %d.", write_instruction_data, write_instruction_address);
+                    $display("FAIL 0 ERROR: exception was not handled correctly %d.", instruction_exception);
                 end
-                
-           write_instruction_enable = 0;
-           read_instruction_enable = 0;
-           write_instruction_address = '0;
-           write_instruction_enable = 0;
-           write_instruction_data = '0;
+            
+            @(negedge clk)
+            
+            #OPERATION_DURATION
+            @(negedge clk);
+            reset = 1;           
+            
+            @(negedge clk);      
+            reset = 0;           
+            
+            @(negedge clk);
+            
+            read_instruction_enable = 1;
+            read_instruction_address = ADDRESS_WIDTH'(1000000000);
+            
+            @(negedge clk)
+            
+            read_instruction_enable = 0;
+            read_instruction_address = '0;
+            
+            @(negedge clk)
+
+            if (instruction_exception == DATA_WIDTH'(1))
+                begin
+                    $display("SUCCESS 1 ERROR: exception was handled correctly %d.", instruction_exception);
+                end
+            else
+                begin
+                    $display("FAIL 1 ERROR: exception was not handled correctly %d.", instruction_exception);
+                end
                 
            #OPERATION_DURATION
            $finish;

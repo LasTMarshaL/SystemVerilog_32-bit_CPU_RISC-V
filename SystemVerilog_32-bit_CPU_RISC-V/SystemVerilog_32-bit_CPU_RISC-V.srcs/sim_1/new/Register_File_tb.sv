@@ -8,6 +8,7 @@ module Register_File_tb;
 
 
     logic clk;
+    logic reset;
     
     logic write_register_enable;
     logic read_register_enable;
@@ -21,6 +22,7 @@ module Register_File_tb;
     logic signed [DATA_WIDTH-1:0] read_register_data_2;
     
     Register_File uut (
+        .reset(reset),
         .clk(clk),
         .write_register_enable(write_register_enable),
         .read_register_enable(read_register_enable),
@@ -42,6 +44,7 @@ module Register_File_tb;
     initial 
         begin
             clk = 0;
+            reset = 1;
             read_register_enable = 0;
             write_register_enable = 0;
             write_register_select = '0;
@@ -50,6 +53,7 @@ module Register_File_tb;
             read_register_select_2 = '0;          
             
             #OPERATION_DURATION
+            reset = 0;
             @(negedge clk)
             
             write_register_enable = 1;
@@ -61,9 +65,12 @@ module Register_File_tb;
             
             write_register_enable = 0;
             read_register_enable = 1;
-            read_register_select_1 = '0;
             
             @(negedge clk)
+            
+            read_register_enable = 0;
+            read_register_select_1 = '0;
+            
             @(negedge clk)
             
             if (read_register_data_1 == '0)
@@ -90,6 +97,10 @@ module Register_File_tb;
             read_register_select_2 = REGISTER_SELECTION_WIDTH'(23);
             
             @(negedge clk)
+            
+            read_register_enable = 0;
+            read_register_select_1 = '0;
+            
             @(negedge clk)
             
             if (read_register_data_2 == write_register_data)
@@ -116,6 +127,10 @@ module Register_File_tb;
             read_register_select_2 = REGISTER_SELECTION_WIDTH'(23);
             
             @(negedge clk)
+            
+            read_register_enable = 0;
+            read_register_select_1 = '0;
+            
             @(negedge clk)
             
             if (read_register_data_2 == -DATA_WIDTH'('sd38))
@@ -127,13 +142,18 @@ module Register_File_tb;
                     $display("FAIL: Register %d was not kept unchanged.", write_register_select);
                 end
                 
-            #OPERATION_DURATION
             @(negedge clk)
-            
             write_register_enable = 1;
             read_register_enable = 0;
             write_register_select = REGISTER_SELECTION_WIDTH'(18);
             write_register_data = -DATA_WIDTH'('sd535);
+            
+            // === ТЕСТ 2: ЗАПИСЬ В Х13 ===
+            @(negedge clk)
+            write_register_enable = 1;
+            read_register_enable = 0;
+            write_register_select = REGISTER_SELECTION_WIDTH'(13);
+            write_register_data = DATA_WIDTH'('sd134);
             
             @(negedge clk)
             
@@ -141,22 +161,19 @@ module Register_File_tb;
             read_register_enable = 1;
             read_register_select_1 = REGISTER_SELECTION_WIDTH'(18);
             
-            #OPERATION_DURATION
             @(negedge clk)
             
-            write_register_enable = 1;
             read_register_enable = 0;
-            write_register_select = REGISTER_SELECTION_WIDTH'(13);
-            write_register_data = DATA_WIDTH'('sd134);
             
             @(negedge clk)
-            @(negedge clk)
             
-            write_register_enable = 0;
             read_register_enable = 1;
             read_register_select_2 = REGISTER_SELECTION_WIDTH'(13);
             
             @(negedge clk)
+            
+            read_register_enable = 0; 
+            
             @(negedge clk)
             
             if (read_register_data_2 == DATA_WIDTH'('sd134) && read_register_data_1 == -DATA_WIDTH'('sd535))

@@ -66,11 +66,15 @@ module System_Register_File_tb();
             
             @(negedge clk)
             
-            write_system_register_enable = 0;
+            write_system_register_enable = 0; 
             read_system_register_enable = 1;
-            read_system_register_select = I_IMMEDIATE_WIDTH'('h300); 
+            read_system_register_select = write_system_register_select; 
             
             @(negedge clk)
+            
+            read_system_register_enable = 0;
+            read_system_register_select = '0;
+            
             @(negedge clk)
             
             if (read_system_register_data == write_system_register_data)
@@ -81,12 +85,13 @@ module System_Register_File_tb();
                 begin
                     $display("FAIL MSTATUS: Number %d was not written in system register %d.", write_system_register_data, write_system_register_select);
                 end
+            write_system_register_select = '0;
             
             #OPERATION_DURATION
             @(negedge clk)
             
             write_system_register_enable = 1;
-            read_system_register_enable = 0;
+            write_system_register_select = '0;
             write_system_register_select = I_IMMEDIATE_WIDTH'('h304); 
             write_system_register_data = DATA_WIDTH'(234);
             
@@ -94,9 +99,13 @@ module System_Register_File_tb();
             
             write_system_register_enable = 0;
             read_system_register_enable = 1;
-            read_system_register_select = I_IMMEDIATE_WIDTH'('h304); 
+            read_system_register_select = write_system_register_select; 
             
             @(negedge clk)
+            
+            read_system_register_enable = 0;
+            read_system_register_select = '0;
+            
             @(negedge clk)
             
             if (read_system_register_data == write_system_register_data)
@@ -107,12 +116,13 @@ module System_Register_File_tb();
                 begin
                     $display("FAIL MIE: Number %d was not written in system register %d.", write_system_register_data, write_system_register_select);
                 end
+            write_system_register_select = '0;
                 
             #OPERATION_DURATION
             @(negedge clk)
             
             write_system_register_enable = 1;
-            read_system_register_enable = 0;
+            write_system_register_select = '0;
             write_system_register_select = I_IMMEDIATE_WIDTH'('h305); 
             write_system_register_data = DATA_WIDTH'(78);
             
@@ -120,9 +130,13 @@ module System_Register_File_tb();
             
             write_system_register_enable = 0;
             read_system_register_enable = 1;
-            read_system_register_select = I_IMMEDIATE_WIDTH'('h305); 
+            read_system_register_select = write_system_register_select; 
             
             @(negedge clk)
+            
+            read_system_register_enable = 0;
+            read_system_register_select = '0;
+            
             @(negedge clk)
             
             if (read_system_register_data == write_system_register_data)
@@ -133,6 +147,7 @@ module System_Register_File_tb();
                 begin
                     $display("FAIL MTVEC: Number %d was not written in system register %d.", write_system_register_data, write_system_register_select);
                 end
+            write_system_register_select = '0;
                 
             #OPERATION_DURATION
             @(negedge clk)
@@ -146,9 +161,13 @@ module System_Register_File_tb();
             
             write_system_register_enable = 0;
             read_system_register_enable = 1;
-            read_system_register_select = I_IMMEDIATE_WIDTH'('h340); 
+            read_system_register_select = write_system_register_select; 
             
             @(negedge clk)
+            
+            read_system_register_enable = 0;
+            read_system_register_select = '0;
+            
             @(negedge clk)
             
             if (read_system_register_data == write_system_register_data)
@@ -159,6 +178,7 @@ module System_Register_File_tb();
                 begin
                     $display("FAIL MSCRATCH: Number %d was not written in system register %d.", write_system_register_data, write_system_register_select);
                 end
+            write_system_register_select = '0;
                 
             #OPERATION_DURATION
             @(negedge clk)
@@ -172,9 +192,12 @@ module System_Register_File_tb();
             
             write_system_register_enable = 0;
             read_system_register_enable = 1;
-            read_system_register_select = I_IMMEDIATE_WIDTH'('h341); 
+            read_system_register_select = write_system_register_select; 
             
             @(negedge clk)
+            
+            read_system_register_enable = 0;
+            
             @(negedge clk)
             
             if (read_system_register_data == write_system_register_data)
@@ -185,6 +208,7 @@ module System_Register_File_tb();
                 begin
                     $display("FAIL MEPC: Number %d was not written in system register %d.", write_system_register_data, write_system_register_select);
                 end
+            write_system_register_select = '0;
                 
             #OPERATION_DURATION
             @(negedge clk)
@@ -198,9 +222,13 @@ module System_Register_File_tb();
             
             write_system_register_enable = 0;
             read_system_register_enable = 1;
-            read_system_register_select = I_IMMEDIATE_WIDTH'('h342); 
+            read_system_register_select = write_system_register_select; 
             
             @(negedge clk)
+            
+            read_system_register_enable = 0;
+            read_system_register_select = '0;
+            
             @(negedge clk)
             
             if (read_system_register_data == write_system_register_data)
@@ -211,6 +239,7 @@ module System_Register_File_tb();
                 begin
                     $display("FAIL MCAUSE: Number %d was not written in system register %d.", write_system_register_data, write_system_register_select);
                 end
+            write_system_register_select = '0;
                 
             #OPERATION_DURATION
             @(negedge clk)
@@ -225,9 +254,13 @@ module System_Register_File_tb();
             
             write_system_register_enable = 0;
             read_system_register_enable = 1;
-            read_system_register_select = I_IMMEDIATE_WIDTH'('h343); 
+            read_system_register_select = write_system_register_select; 
             
             @(negedge clk)
+            
+            read_system_register_enable = 0;
+            read_system_register_select = '0;
+            
             @(negedge clk)
             
             if (read_system_register_data == write_system_register_data)
@@ -238,6 +271,7 @@ module System_Register_File_tb();
                 begin
                     $display("FAIL MTVAL: Number %d was not written in system register %d.", write_system_register_data, write_system_register_select);
                 end
+            write_system_register_select = '0;
                 
             #OPERATION_DURATION
             @(negedge clk)
@@ -251,9 +285,13 @@ module System_Register_File_tb();
             
             write_system_register_enable = 0;
             read_system_register_enable = 1;
-            read_system_register_select = I_IMMEDIATE_WIDTH'('h343); 
+            read_system_register_select = write_system_register_select; 
             
             @(negedge clk)
+            
+            read_system_register_enable = 0;
+            read_system_register_select = '0;
+            
             @(negedge clk)
             
             if (read_system_register_data == write_system_register_data_previous)
@@ -262,43 +300,49 @@ module System_Register_File_tb();
                 end
             else
                 begin
-                    $display("FAIL: register %d was not kept unchanged (no permission).",write_system_register_select);
+                    $display("FAIL: register %d was not kept unchanged (no permission).", write_system_register_select);
                 end
+            write_system_register_select = '0;
                 
             #OPERATION_DURATION
             @(negedge clk)
             
             write_system_register_enable = 1;
             read_system_register_enable = 0;
-            write_system_register_select = I_IMMEDIATE_WIDTH'('h363); 
+            write_system_register_select = write_system_register_select; 
             write_system_register_data = DATA_WIDTH'(56);
             
             @(negedge clk)
             
             if (system_register_exception == DATA_WIDTH'(2))
                 begin
-                    $display("SUCCESS 4 ERROR: non-available system register during writing was received.", system_register_exception);
+                    $display("SUCCESS 2 ERROR: non-available system register during writing was received.", system_register_exception);
                 end
             else
                 begin
-                    $display("FAIL 4 ERROR: non-available system register during writing was not received.", system_register_exception);
+                    $display("FAIL 2 ERROR: non-available system register during writing was not received.", system_register_exception);
                 end
                         
             write_system_register_enable = 0;
             read_system_register_enable = 1;
-            read_system_register_select = I_IMMEDIATE_WIDTH'('h363); 
+            read_system_register_select = write_system_register_select; 
             
             @(negedge clk)
+            
+            read_system_register_enable = 0;
+            read_system_register_select = '0;
+            
             @(negedge clk)
             
             if (system_register_exception == DATA_WIDTH'(2))
                 begin
-                    $display("SUCCESS 4 ERROR: non-available system register during reading was received.", system_register_exception);
+                    $display("SUCCESS 2 ERROR: non-available system register during reading was received.", system_register_exception);
                 end
             else
                 begin
-                    $display("FAIL 4 ERROR: non-available system register during reading was not received.", system_register_exception);
-                end       
+                    $display("FAIL 2 ERROR: non-available system register during reading was not received.", system_register_exception);
+                end
+            write_system_register_select = '0;       
             
             #OPERATION_DURATION
             @(negedge clk)
@@ -311,20 +355,53 @@ module System_Register_File_tb();
             @(negedge clk)
             
             write_system_register_enable = 0;
+            write_system_register_select = '0;
             read_system_register_enable = 1;
-            read_system_register_select = I_IMMEDIATE_WIDTH'('h343); 
+            read_system_register_select = write_system_register_select; 
             
             @(negedge clk)
+            
+            read_system_register_enable = 0;
+            read_system_register_select = '0;
+            
             @(negedge clk)
             
             if (read_system_register_data == write_system_register_data_previous)
                 begin
-                    $display("SUCCESS: register %d was kept unchanged (exception).", write_system_register_select);
+                    $display("SUCCESS: register %d was kept unchanged (exception).", read_system_register_select);
                 end
             else
                 begin
-                    $display("FAIL: register %d was not kept unchanged (exception).",write_system_register_select);
+                    $display("FAIL: register %d was not kept unchanged (exception).", read_system_register_select);
                 end
+                
+            #OPERATION_DURATION
+            @(negedge clk);
+            reset = 1;           
+
+            @(negedge clk);      
+            reset = 0;           
+            
+            @(negedge clk);
+            
+            read_system_register_enable = 1;
+            read_system_register_select = I_IMMEDIATE_WIDTH'('h342); 
+            
+            @(negedge clk)
+            
+            read_system_register_enable = 0;
+            
+            @(negedge clk)
+            
+            if (read_system_register_data == DATA_WIDTH'(2))
+                begin
+                    $display("SUCCESS: register %d  kept exception code.", read_system_register_select);
+                end
+            else
+                begin
+                    $display("FAIL: register %d did not keep exception code.", read_system_register_select);
+                end
+            read_system_register_select = '0;
                 
             #OPERATION_DURATION
             $finish;
